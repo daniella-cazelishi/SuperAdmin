@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Scripts -->
+  <script type="module" src="/scripts/sos.js" defer></script>
+  <script type="module" src="/scripts/notifications.js" defer></script>
+  <script type="module" src="/scripts/auth.js"></script>
+  <script type="module" src="/scripts/darkmode.js"></script>
+  <script type="module" src="/scripts/language.js"></script>
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: {} } };
+  </script>
+
+  <!-- Fonts and Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big { font-family: "Radio Canada Big", sans-serif; font-weight: 600; }
+    #national-park { font-family: "National Park", sans-serif; font-weight: 400; }
+
+    /* Emergency popup overlay */
+   /* Emergency popup overlay */
+#emergency-alert {
+  position: fixed;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem; /* default for desktop */
+  font-weight: bold;
+  z-index: 9999; /* put above snackbar */
+  text-align: center;
+  padding: 2rem;
+  line-height: 1.4;
+  display: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  #emergency-alert {
+    font-size: 1.25rem;  /* smaller text */
+    padding: 1rem;
+    align-items: flex-start; /* push text higher */
+    padding-top: 4rem; /* so text shows clearly above snackbar */
+  }
+}
+
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-screen">
+
+  <!-- Mobile Sidebar Toggle -->
+  <button
+    id="sidebarToggle"
+    class="md:hidden fixed top-4 left-4 z-50 p-3 bg-[#9F2424] text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-700"
+    aria-label="Open sidebar"
+  >
+    <i class="fas fa-bars text-lg"></i>
+  </button>
+
+  <!-- Sidebar Backdrop (mobile only) -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden md:hidden"></div>
+
+  <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed top-0 left-0 h-full w-72 bg-[#9F2424] dark:bg-gray-800 text-white p-4 flex flex-col z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-2xl"
+    >
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-5">
+        <a href="/src/dashboard.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-users"></i><span id="sidebar-emergency">Emergency Reports</span>
+        </a>
+        <a href="/src/history.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-history"></i><span id="sidebar-history">History</span>
+        </a>
+        <a href="/src/analytics_and_reports.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-chart-bar"></i><span id="sidebar-analytics">Analytics & Reports</span>
+        </a>
+        <a href="/src/announcement.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-bullhorn"></i><span id="sidebar-announcements">Announcements</span>
+        </a>
+        <a href="/src/user-management.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-user-cog"></i><span id="sidebar-users">User Management</span>
+        </a>
+      </nav>
+
+      <!-- Admin & Settings at bottom -->
+      <div class="mt-auto space-y-3 pt-6 border-t border-white/30">
+        <a href="/src/Settings.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-cog"></i><span id="sidebar-settings">Settings</span>
+        </a>
+        <a href="/src/admin.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-user-shield"></i><span id="sidebar-admin">Admin</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-72 p-4 sm:p-6 min-h-screen transition-all">
+      <h1 id="dashboard-title" class="text-3xl font-bold pb-7">Emergency Reports</h1>
+
+      <!-- Incident Stats -->
+      <div class="flex flex-wrap gap-6 pb-6">
+        <div class="flex items-center space-x-2">
+          <span id="active-badge" class="bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full">0</span>
+          <span class="font-medium">Active Incidents</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="canceled-badge" class="bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full">0</span>
+          <span class="font-medium">Canceled Reports</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span id="completed-badge" class="bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full">0</span>
+          <span class="font-medium">Completed Reports</span>
+        </div>
+      </div>
+
+      <!-- Incident Table -->
+      <div class="overflow-y-auto h-[470px] max-h-[470px] bg-white dark:bg-gray-800 shadow-lg relative">
+        <table class="w-full text-sm text-gray-900 dark:text-gray-100">
+          <thead class="bg-[#9F2424] text-white sticky top-0 z-10">
+            <tr>
+              <th class="px-4 py-2">Type of Incident</th>
+              <th class="px-4 py-2">User</th>
+              <th class="px-4 py-2">Phone</th>
+              <th class="px-4 py-2">Description</th>
+              <th class="px-4 py-2">Location</th>
+              <th class="px-4 py-2">Occurrence Date</th>
+              <th class="px-4 py-2">Responder</th>
+              <th class="px-4 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="loading-row">
+              <td colspan="8">
+                <div class="flex items-center justify-center h-40 text-gray-500 dark:text-gray-400">
+                  Loading reports...
+                </div>
+              </td>
+            </tr>
+            <tr id="no-data-row" class="hidden">
+              <td colspan="8" class="p-3 text-center text-gray-500 dark:text-gray-400">
+                No reports available as of the moment :)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Notifications -->
+    <aside class="hidden lg:flex flex-col w-64 bg-[#9F2424] dark:bg-gray-800 text-white p-4">
+      <h2 id="label-notifications" class="text-xl font-bold mb-4">Notifications</h2>
+      <div id="notification-list" class="space-y-4 overflow-y-auto pr-2 pb-4 flex-1"></div>
+      <button id="clear-notifications" class="mt-2 p-2 bg-white text-red-700 rounded shadow hover:bg-gray-200 dark:bg-gray-700 dark:text-red-400 dark:hover:bg-gray-600">
+        Mark all as read
+      </button>
+    </aside>
+  </div>
+
+  <!-- Emergency Alert Overlay -->
+  <div id="emergency-alert">New Emergency Report! Please check the dashboard.</div>
+
+  <!-- Audio -->
+  <audio id="notification-sound" src="./sounds/alertsound.mp3" preload="auto"></audio>
+
+  <script>
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("sidebar-backdrop");
+
+    sidebarToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+      backdrop.classList.toggle("hidden");
+    });
+
+    backdrop.addEventListener("click", () => {
+      sidebar.classList.add("-translate-x-full");
+      backdrop.classList.add("hidden");
+    });
+
+    // Audio + Notifications
+    const audio = document.getElementById("notification-sound");
+    let canPlayAudio = false;
+    const emergencyAlert = document.getElementById("emergency-alert");
+    const notificationList = document.getElementById("notification-list");
+
+    window.addEventListener("load", () => {
+      audio.volume = 0;
+      audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 1;
+        canPlayAudio = true;
+      }).catch(() => {});
+    });
+
+    document.body.addEventListener("click", () => { canPlayAudio = true; }, { once: true });
+    document.body.addEventListener("touchstart", () => { canPlayAudio = true; }, { once: true });
+
+    function playNotificationSound() {
+      if (!canPlayAudio) return;
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+
+    function showEmergencyAlert(message) {
+      emergencyAlert.textContent = message;
+      emergencyAlert.style.display = "flex";
+      playNotificationSound();
+      setTimeout(() => { emergencyAlert.style.display = "none"; }, 5000);
+    }
+
+    function addNotification(message) {
+      const div = document.createElement("div");
+      div.className = "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded shadow-md";
+      div.textContent = message;
+      notificationList.prepend(div);
+    }
+
+    function triggerEmergencyNotification(message = "New Emergency Report!") {
+      showEmergencyAlert(message);
+      addNotification(message);
+    }
+  </script>
+</body>
+</html>

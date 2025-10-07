@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-weight: 600;
+      }
+      /* Sidebar hover for dark mode */
+      .sidebar-link:hover {
+        background-color: #ffffff !important;
+        color: #9F2424 !important;
+      }
+      .sidebar-link-dark:hover {
+        background-color: #374151 !important;
+        color: #f87171 !important;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-screen">
+    <div class="flex h-full">
+      <!-- Sidebar -->
+      <aside class="bg-[#9F2424] dark:bg-gray-800 text-white w-64 p-4 flex flex-col">
+        <div class="flex items-center pb-8">
+          <i class="fas fa-plus-circle text-2xl pr-3"></i>
+          <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+        </div>
+        <nav class="flex flex-col gap-5">
+          <a href="/src/dashboard.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-users"></i>
+            <span>Emergency Reports</span>
+          </a>
+          <a href="/src/history.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-history"></i>
+            <span>History</span>
+          </a>
+          <a href="/src/analytics_and_reports.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-chart-bar"></i>
+            <span>Analytics & Reports</span>
+          </a>
+          <a href="/src/announcement.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-bullhorn"></i>
+            <span>Announcements</span>
+          </a>
+          <a href="/src/user-management.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-user-cog"></i>
+            <span>User Management</span>
+          </a>
+        </nav>
+        <div class="mt-auto space-y-3 pt-6 border-t border-white/30">
+          <a href="/src/Settings.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+          <a href="/src/admin.html" class="flex items-center gap-4 p-3 rounded-lg sidebar-link transition">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold dark:text-gray-100">User Management</h1>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="mb-4 flex justify-end">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by name, email, or address..."
+              class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-red-600 dark:bg-gray-700 dark:text-gray-200"
+            />
+          </div>
+
+          <!-- User Table -->
+          <section>
+            <div class="overflow-x-auto rounded-lg shadow-md bg-white dark:bg-gray-700">
+              <table class="w-full border-collapse text-gray-800 dark:text-gray-200">
+                <thead class="bg-[#9F2424] dark:bg-red-900 text-white">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Fullname</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Address</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Phone</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Email</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Sign In</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Date Registered</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody" class="divide-y divide-gray-300 dark:divide-gray-600">
+                  <tr id="loading-row" class="bg-gray-100 dark:bg-gray-700">
+                    <td colspan="6" class="h-32 text-center align-middle text-gray-500 dark:text-gray-400">
+                      Loading users...
+                    </td>
+                  </tr>
+                  <tr id="no-data-row" class="hidden bg-gray-100 dark:bg-gray-700">
+                    <td colspan="6" class="h-32 text-center align-middle text-gray-500 dark:text-gray-400">
+                      No users available
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- JS file -->
+    <script type="module" src="scripts/user-management.js"></script>
+  </body>
+</html>

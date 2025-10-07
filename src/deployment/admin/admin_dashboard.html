@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {},
+      },
+    };
+  </script>
+
+  <!-- Link to sos.js -->
+  <script type="module" src="/src/scripts/sos.js" defer></script>
+  <script type="module" src="/src/scripts/notifications.js" defer></script>
+  <script type="module" src="/src/scripts/auth.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    #national-park {
+      font-family: "National Park", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #4f46e5;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(18px);
+    }
+
+    .dark-mode {
+      background-color: #1a202c;
+      color: #e2e8f0;
+    }
+
+    .dark-mode .bg-white {
+      background-color: #2d3748;
+    }
+
+    .dark-mode .text-gray-500 {
+      color: #a0aec0;
+    }
+
+    .dark-mode .bg-gray-200 {
+      background-color: #4a5568;
+    }
+
+    .dark-mode select {
+      background-color: #2d3748;
+      color: #cbd5e0;
+    }
+
+    .dark-mode .no-dark-mode {
+      background-color: #e2e8f0;
+      color: #4a5568;
+    }
+  </style>
+  <style>
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", async () => {
+      const analyticsLink = document.getElementById("analytics-link");
+      const userManagementLink = document.getElementById("user-management-link");
+
+      // Simulate fetching user role (Replace with Firebase logic)
+      let userRole = "viewer"; // Example role, should be retrieved dynamically
+
+      if (userRole !== "admin") {
+        analyticsLink.classList.add("disabled");
+        userManagementLink.classList.add("disabled");
+
+        // Remove href attributes to prevent navigation
+        analyticsLink.removeAttribute("href");
+        userManagementLink.removeAttribute("href");
+      }
+    });
+  </script>
+</head>
+
+<body class="bg-gray-100 h-screen">
+  <div class="flex h-full">
+    <aside class="bg-[#9F2424] text-white w-64 p-4 flex flex-col sidebar">
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-5">
+        <a href="/src/admin/admin_admin.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-users"></i><span>Emergency Reports</span>
+        </a>
+        <a href="/src/admin/admin_volunteers.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-user-shield"></i><span>Volunteers</span>
+        </a>
+        <a href="/src/admin/admin_history.html"
+          class="flex items-center gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-history"></i><span>History</span>
+        </a>
+        <a href="/src/admin/admin_analytics_and_reports.html" id="analytics-link"
+          class="flex items-center gap-5 p-2 rounded-md transition">
+          <i class="fas fa-chart-bar"></i><span>Analytics & Reports</span>
+        </a>
+        <a href="/src/admin/admin_user-management.html" id="user-management-link"
+          class="flex items-center gap-4 p-2 rounded-md transition">
+          <i class="fas fa-user-cog"></i><span>User Management</span>
+        </a>
+      </nav>
+      <div class="space-y-4 mt-auto">
+        <a href="/src/admin/admin_Settings.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-cog"></i><span id="national-park">Settings</span>
+        </a>
+        <a href="/src/admin/admin_admin.html"
+          class="flex items-center gap-3 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-user-shield"></i><span id="national-park">Admin</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex-col px-5 py-4">
+      <h1 id="radio-canada-big" class="text-3xl font-bold pb-7">
+        Emergency Reports
+      </h1>
+
+      <!-- Incident Stats -->
+      <div class="flex flex-row gap-1 pb-3">
+        <div class="flex items-center">
+          <i class="fa-regular fa-bell text-2xl mr-3.5"></i>
+          <div
+            class="bg-red-600 rounded-full flex justify-center size-2.5 p-3 absolute top-[4.5rem] left-[18rem] items-center">
+            <p class="text-white text-base">0</p>
+          </div>
+          <!-- <span
+                class="bg-red-600 absolute top-[4.3em] left-[17.7rem] size-5 text-white rounded-full px-2"
+                >2</span
+              > -->
+          <span id="national-park" class="text-sm mr-2">Flagged Incidents</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fa-regular fa-circle-check text-2xl mr-3.5"></i>
+          <div
+            class="bg-red-600 rounded-full flex justify-center size-2.5 p-3 absolute top-[4.5rem] left-[27.8rem] items-center">
+            <span id="validated-badge" class="text-white text-base">0</span>
+          </div>
+          <span id="national-park" class="text-sm mr-2">Validated Incidents</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-exclamation-triangle text-2xl mr-3.5"></i>
+          <div
+            class="bg-red-600 rounded-full flex justify-center size-2.5 p-3 absolute top-[4.5rem] left-[38.130rem] items-center">
+            <span id="active-badge" class="text-white text-base">0</span>
+          </div>
+          <span id="national-park" class="text-sm mr-2">Active Incidents</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-check text-2xl mr-3"></i>
+          <div
+            class="bg-red-600 rounded-full flex justify-center size-2.5 p-3 absolute top-[4.5rem] left-[47.5rem] items-center">
+            <span id="resolved-badge" class="text-white text-base">0</span>
+          </div>
+          <span id="national-park" class="text-sm mr-2">Resolved Incidents</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-ban text-2xl mr-3"></i>
+          <div
+            class="bg-red-600 rounded-full flex justify-center size-2.5 p-3 absolute top-[4.5rem] left-[57.5rem] items-center">
+            <span id="canceled-badge" class="text-white text-base">0</span>
+          </div>
+          <span id="national-park" class="text-sm">Canceled Reports</span>
+        </div>
+      </div>
+
+      <!-- Incident Table -->
+      <div class="overflow-y-auto h-[470px] max-h-[470px] bg-white shadow-lg relative">
+        <table class="w-full bg-white rounded-lg">
+          <thead class="bg-[#9F2424] text-white sticky top-0 z-10">
+            <tr>
+              <th class="p-3" id="radio-canada-big">Type of Incident</th>
+              <th class="p-3" id="radio-canada-big">User</th>
+              <th class="p-3 text-sm" id="radio-canada-big">Phone</th>
+              <th class="p-3" id="radio-canada-big">Description</th>
+              <th class="p-3" id="radio-canada-big">Location</th>
+              <th class="p-3" id="radio-canada-big">Occurrence Date</th>
+              <th class="p-3" id="radio-canada-big">Status</th>
+              <th class="p-3" id="radio-canada-big">Action</th>
+            </tr>
+          </thead>
+          <tbody class="relative">
+            <tr id="loading-row" class="absolute top-52 flex justify-center items-center w-full h-full">
+              <td colspan="8" class="p-3 text-center text-gray-500">
+                Loading reports...
+              </td>
+            </tr>
+
+            <tr id="no-data-row" class="hidden">
+              <td colspan="8" class="p-3 text-center text-gray-500">
+                No reports available as of the moment :)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+
+    <!-- Notifications and Contacts -->
+    <aside class="w-64 p-6 bg-white">
+      <h2 class="text-xl font-bold mb-4">Notifications</h2>
+      <div id="notification-list" class="space-y-4 mb-6">
+        <p id="loading-notifications" class="text-gray-500">Loading notifications...</p>
+      </div>
+
+      <!-- <h2 class="text-xl font-bold mb-4">Contacts</h2>
+  <div class="space-y-4">
+    <div class="flex items-center">
+      <i class="fas fa-user-circle text-gray-600 mr-2"></i>
+      <span>Natali Craig</span>
+    </div>
+    <div class="flex items-center">
+      <i class="fas fa-user-circle text-gray-600 mr-2"></i>
+      <span>Drew Cano</span>
+    </div>
+  </div> -->
+    </aside>
+
+  </div>
+  <audio id="notification-sound" src="/src/sounds/poppop.ai - amber alert sound effect.mp3" preload="auto"></audio>
+
+
+
+  <!-- Footer -->
+  <!-- <footer class="bg-[#9F2424] text-white text-center p-4">
+      <p>&copy; 2023 Bantay 72. All rights reserved.</p>
+    </footer> -->
+</body>
+
+</html>

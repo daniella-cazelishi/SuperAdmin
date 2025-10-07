@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {},
+      },
+    };
+  </script>
+  <script type="module" src="scripts/volunteers.js" defer></script>
+  <script type="module" src="scripts/notifications.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    #national-park {
+      font-family: "National Park", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 h-screen">
+  <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside class="bg-[#9F2424] text-white w-64 p-4 flex flex-col sidebar">
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-5">
+        <a href="dashboard.html"
+          class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="Emergency Reports">
+          <i class="fas fa-users"></i>
+          <span id="national-park">Emergency Reports</span>
+        </a>
+        <a href="volunteers.html"
+          class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="Volunteers">
+          <i class="fas fa-user-shield"></i>
+          <span id="national-park">Volunteers</span>
+        </a>
+        <a href="history.html"
+          class="items-center flex flex-row gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="History">
+          <i class="fas fa-history" aria-hidden="true"></i>
+          <span id="national-park">History</span>
+        </a>
+        <a href="analytics_and_reports.html"
+          class="items-center flex flex-row gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="Analytics and Reports">
+          <i class="fas fa-chart-bar"></i>
+          <span id="national-park">Analytics & Reports</span>
+        </a>
+        <a href="user-management.html"
+          class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="User  Management">
+          <i class="fas fa-user-cog"></i>
+          <span id="national-park">User Management</span>
+        </a>
+      </nav>
+      <div class="space-y-4 mt-auto">
+        <a href="Settings.html"
+          class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="Settings">
+          <i class="fas fa-cog"></i>
+          <span id="national-park">Settings</span>
+        </a>
+        <a href="admin.html"
+          class="flex flex-row gap-3 items-center p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          aria-label="Super Admin">
+          <i class="fas fa-user-shield"></i>
+          <span id="national-park">Super Admin</span>
+        </a>
+      </div>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 px-5 py-4">
+      <h1 class="text-3xl font-bold mb-5">Volunteers</h1>
+
+      <!-- Volunteers Table -->
+      <div class="overflow-y-auto max-h-[500px] shadow-lg">
+        <table class="w-full bg-white">
+          <thead class="bg-[#9F2424] text-white sticky top-0 z-10">
+            <tr>
+              <th class="p-3" id="radio-canada-big">Volunteer Name</th>
+              <th class="p-3" id="radio-canada-big">Address</th>
+              <th class="p-3" id="radio-canada-big">Contact Info</th>
+              <th class="p-3" id="radio-canada-big">Assigned Incidents</th>
+              <th class="p-3" id="radio-canada-big">Occurrence Date</th>
+              <th class="p-3" id="radio-canada-big">Status</th>
+            </tr>
+          </thead>
+          <tbody class="relative">
+            <tr id="loading-row">
+              <td colspan="6" class="p-3 text-center text-gray-500">
+                Loading reports...
+              </td>
+            </tr>
+
+            <tr id="no-data-row" class="hidden">
+              <td colspan="6" class="p-3 text-center text-gray-500">
+                No volunteers available as of the moment
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+
+
+    <!-- Notifications and Contacts -->
+    <!-- <aside class="w-64 p-6 bg-white">
+      <h2 class="text-xl font-bold mb-4">Notifications</h2>
+      <div id="notification-list" class="space-y-4 mb-6">
+        <p id="loading-notifications" class="text-gray-500">Loading notifications...</p>
+      </div>
+
+      <h2 class="text-xl font-bold mb-4">Contacts</h2>
+      <div class="space-y-4">
+        <div class="flex items-center">
+          <i class="fas fa-user-circle text-gray-600 mr-2"></i>
+          <span>Natali Craig</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-user-circle text-gray-600 mr-2"></i>
+          <span>Drew Cano</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+  <audio id="notification-sound" src="/src/sounds/relax-message-tone.mp3" preload="auto"></audio> -->
+
+
+
+  <!-- Footer -->
+  <!-- <footer class="bg-[#9F2424] text-white text-center p-4">
+      <p>&copy; 2023 Bantay 72. All rights reserved.</p>
+    </footer> -->
+</body>
+
+</html>

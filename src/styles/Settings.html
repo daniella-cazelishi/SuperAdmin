@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+      }
+      #national-park {
+        font-family: "National Park", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #4f46e5;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+
+      .dark-mode {
+        background-color: #1a202c;
+        color: #e2e8f0;
+      }
+
+      .dark-mode .bg-white {
+        background-color: #2d3748;
+      }
+
+      .dark-mode .text-gray-500 {
+        color: #a0aec0;
+      }
+
+      .dark-mode .bg-gray-200 {
+        background-color: #4a5568;
+      }
+
+      .dark-mode select {
+        background-color: #2d3748;
+        color: #cbd5e0;
+      }
+
+      .dark-mode .no-dark-mode {
+        background-color: #e2e8f0;
+        color: #4a5568;
+      }
+    </style>
+   <style>
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", async () => {
+      const analyticsLink = document.getElementById("analytics-link");
+      const userManagementLink = document.getElementById("user-management-link");
+
+      // Simulate fetching user role (Replace with Firebase logic)
+      let userRole = "viewer"; // Example role, should be retrieved dynamically
+
+      if (userRole !== "admin") {
+        analyticsLink.classList.add("disabled");
+        userManagementLink.classList.add("disabled");
+
+        // Remove href attributes to prevent navigation
+        analyticsLink.removeAttribute("href");
+        userManagementLink.removeAttribute("href");
+      }
+    });
+  </script>
+  </head>
+  <body class="bg-gray-100 h-screen">
+    <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside
+      class="fixed top-0 left-0 h-full w-64 bg-[#9F2424] text-white p-4 flex flex-col z-10"
+      aria-label="Sidebar Navigation"
+    >
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+
+      <nav class="flex flex-col gap-5">
+        <a
+          href="dashboard.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-users"></i>
+          <span id="national-park">Emergency Reports</span></a
+        >
+        <a
+          href="volunteers.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-user-shield"></i>
+          <span id="national-park">Volunteers</span></a
+        >
+        <a
+          href="history.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-history"></i>
+          <span id="national-park">History</span></a
+        >
+        <a
+          href="analytics_and_reports.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-chart-bar"></i>
+          <span id="national-park">Analytics & Reports</span></a
+        >
+        <a
+          href="user-management.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-user-cog"></i>
+          <span id="national-park">User Management</span></a
+        >
+      </nav>
+
+      <div class="mt-auto space-y-4 pt-6 border-t border-white/30">
+        <a
+          href="Settings.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-cog"></i>
+          <span id="national-park">Settings</span></a
+        >
+        <a
+          href="admin.html"
+          class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+          ><i class="fas fa-user-shield"></i>
+          <span id="national-park">Super Admin</span></a
+        >
+      </div>
+    </aside>
+      <!-- Main Content -->
+      <div class="flex-1 p-6" id="main-content">
+        <h1 class="text-3xl font-bold mb-6">Settings</h1>
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+          <!-- Dark Mode -->
+          <div class="flex justify-between items-center mb-4">
+            <span id="dark-mode-label">Dark Mode</span>
+            <label class="switch">
+              <input type="checkbox" id="darkToggle" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Language -->
+          <div class="flex justify-between items-center mb-4">
+            <span id="language-label">Language</span>
+            <select id="languageSelect" class="border p-2 rounded">
+              <option value="en">English</option>
+              <option value="fil">Filipino</option>
+            </select>
+          </div>
+
+          <!-- Notifications -->
+          <div class="mt-6">
+            <h2 id="notif-title" class="text-lg font-semibold mb-4">
+              Notification Preferences
+            </h2>
+            <div class="flex justify-between items-center mb-3">
+              <span id="email-alerts-label">Email Alerts</span>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-10 space-y-4">
+            <button
+              id="logout-button"
+              onclick="window.location.href='index.html'"
+              class="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const page = document.getElementById("page");
+      const darkToggle = document.getElementById("darkToggle");
+      const languageSelect = document.getElementById("languageSelect");
+
+      // Elements with text to translate
+      const textElements = {
+        title: document.querySelector("h1.text-3xl"),
+        darkModeLabel: document.getElementById("dark-mode-label"),
+        languageLabel: document.getElementById("language-label"),
+        notifTitle: document.getElementById("notif-title"),
+        emailAlertsLabel: document.getElementById("email-alerts-label"),
+        logoutButton: document.getElementById("logout-button"),
+      };
+
+      // Translations dictionary
+      const translations = {
+        en: {
+          title: "Settings",
+          darkModeLabel: "Dark Mode",
+          languageLabel: "Language",
+          notifTitle: "Notification Preferences",
+          emailAlertsLabel: "Email Alerts",
+          logoutButton: "Log Out",
+        },
+        fil: {
+          title: "Mga Setting",
+          darkModeLabel: "Madilim na Mode",
+          languageLabel: "Wika",
+          notifTitle: "Mga Kagustuhan sa Abiso",
+          emailAlertsLabel: "Mga Abiso sa Email",
+          logoutButton: "Mag-Logout",
+        },
+      };
+
+      // Function to update all text elements
+      function updateLanguage(lang) {
+        const t = translations[lang];
+        for (const key in t) {
+          if (textElements[key]) {
+            textElements[key].textContent = t[key];
+          }
+        }
+      }
+
+      // Initial language setup
+      updateLanguage(languageSelect.value);
+
+      // Language selection event
+      languageSelect.addEventListener("change", (e) => {
+        updateLanguage(e.target.value);
+      });
+
+      // Dark mode toggle
+      darkToggle.addEventListener("change", () => {
+        page.classList.toggle("dark-mode");
+      });
+    </script>
+  </body>
+</html>

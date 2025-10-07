@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics and Reports</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {},
+      },
+    };
+  </script>
+
+  <!-- Fonts and Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+    }
+    #national-park {
+      font-family: "National Park", sans-serif;
+    }
+  </style>
+
+  <!-- Export Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script type="module">
+  import { protectPage, setupUI } from './auth.js';
+
+  document.addEventListener("DOMContentLoaded", () => {
+    protectPage(["super", "admin"], (role, uid) => {
+      setupUI(role, uid);
+    });
+  });
+</script>
+
+
+  <!-- PDF & Excel Export -->
+  <script>
+   async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+
+  doc.setFontSize(18);
+  doc.text("Bantay 72 - Analytics and Reports", 10, 15);
+
+  const totalIncidents = document.getElementById("total-incidents").innerText;
+  const avgResponseTime = document.getElementById("avg-response-time").innerText;
+  const activeVolunteers = document.getElementById("active-volunteers").innerText;
+
+  doc.setFontSize(12);
+  doc.text(`Total Incidents: ${totalIncidents}`, 10, 30);
+  doc.text(`Avg Response Time: ${avgResponseTime}`, 10, 40);
+  doc.text(`Active Volunteers: ${activeVolunteers}`, 10, 50);
+
+  let yOffset = 60;
+  const charts = [
+    { id: "incidentChart", label: "Incident Trends" },
+    { id: "responseTimeChart", label: "Response Time" },
+    { id: "incidentTypeChart", label: "Incident Types" }
+  ];
+
+  for (const chart of charts) {
+    const canvas = document.getElementById(chart.id);
+    if (canvas) {
+      const chartImg = canvas.toDataURL("image/png");
+      const imageHeight = 90;
+      const marginBottom = 10;
+
+      // Check if adding image exceeds page height, add new page if needed
+      if (yOffset + imageHeight + marginBottom > pageHeight - 20) {
+        addFooter(doc, pageHeight);
+        doc.addPage();
+        yOffset = 20;
+      }
+
+      doc.setFontSize(14);
+      doc.text(chart.label, 10, yOffset);
+      yOffset += 5;
+      doc.addImage(chartImg, "PNG", 10, yOffset, 180, imageHeight);
+      yOffset += imageHeight + marginBottom;
+    }
+  }
+
+  addFooter(doc, pageHeight);
+
+  doc.save("bantay72_report.pdf");
+}
+
+function addFooter(doc, pageHeight) {
+  const date = new Date().toLocaleString();
+  doc.setFontSize(10);
+  doc.text(`Generated on: ${date}`, 10, pageHeight - 10);
+}
+
+
+function exportToExcel() {
+  const wb = XLSX.utils.book_new();
+
+  // 1. Metrics Sheet
+  const metrics = [
+    ["Metric", "Value"],
+    ["Total Incidents", document.getElementById("total-incidents").innerText],
+    ["Avg Response Time", document.getElementById("avg-response-time").innerText],
+    ["Active Volunteers", document.getElementById("active-volunteers").innerText],
+  ];
+  const metricsSheet = XLSX.utils.aoa_to_sheet(metrics);
+  XLSX.utils.book_append_sheet(wb, metricsSheet, "Metrics");
+
+  // 2. Incident Trends (e.g., by Month or Day)
+  const trendsChart = Chart.getChart("incidentChart");
+  if (trendsChart) {
+    const trendsData = [["Period", "Incidents"]];
+    trendsChart.data.labels.forEach((label, i) => {
+      trendsData.push([label, trendsChart.data.datasets[0].data[i]]);
+    });
+    const trendsSheet = XLSX.utils.aoa_to_sheet(trendsData);
+    XLSX.utils.book_append_sheet(wb, trendsSheet, "Incident Trends");
+  }
+
+  // 3. Response Time Distribution
+  const responseChart = Chart.getChart("responseTimeChart");
+  if (responseChart) {
+    const responseData = [["Range", "Count"]];
+    responseChart.data.labels.forEach((label, i) => {
+      responseData.push([label, responseChart.data.datasets[0].data[i]]);
+    });
+    const responseSheet = XLSX.utils.aoa_to_sheet(responseData);
+    XLSX.utils.book_append_sheet(wb, responseSheet, "Response Time");
+  }
+
+  // 4. Incident Types Breakdown
+  const typeChart = Chart.getChart("incidentTypeChart");
+  if (typeChart) {
+    const typeData = [["Type", "Count"]];
+    typeChart.data.labels.forEach((label, i) => {
+      typeData.push([label, typeChart.data.datasets[0].data[i]]);
+    });
+    const typeSheet = XLSX.utils.aoa_to_sheet(typeData);
+    XLSX.utils.book_append_sheet(wb, typeSheet, "Incident Types");
+  }
+
+  // 5. Export the file with timestamp
+  const timestamp = new Date().toISOString().split("T")[0];
+  XLSX.writeFile(wb, `bantay72_report_${timestamp}.xlsx`);
+}
+
+  </script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside class="bg-[#9F2424] text-white w-64 p-4 flex flex-col sidebar">
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-5">
+        <a href="dashboard.html" class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-users"></i><span id="national-park">Emergency Reports</span>
+        </a>
+        <a href="volunteers.html" class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-user-shield"></i><span id="national-park">Volunteers</span>
+        </a>
+        <a href="history.html" class="flex items-center gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-history"></i><span id="national-park">History</span>
+        </a>
+       <a href="analytics_and_reports.html" id="analytics-link" class="flex items-center gap-5 p-2 rounded-md transition">
+  <i class="fas fa-chart-bar"></i><span>Analytics & Reports</span>
+</a>
+
+        <a href="user-management.html" id="user-management-link" class="flex items-center gap-5 p-2 rounded-md transition">
+          <i class="fas fa-user-cog"></i><span id="national-park">User Management</span>
+        </a>
+      </nav>
+      <div class="space-y-4 mt-auto">
+        <a href="Settings.html" class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-cog"></i><span id="national-park">Settings</span>
+        </a>
+        <a href="admin.html" class="flex items-center gap-3 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+          <i class="fas fa-user-shield"></i><span id="national-park">Super Admin</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 space-y-8">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Analytics and Reports</h2>
+        <div class="space-x-4">
+          <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md" onclick="generatePDF()">
+            <i class="fas fa-file-pdf mr-2"></i> PDF
+          </button>
+          <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md" onclick="exportToExcel()">
+            <i class="fas fa-file-excel mr-2"></i> Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-white p-4 rounded-md shadow-md flex flex-wrap items-center gap-4">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" class="border p-2 rounded" />
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" class="border p-2 rounded" />
+        <button id="filter-button" class="bg-blue-600 text-white px-4 py-2 rounded-md">Apply Filter</button>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded-md shadow-md">
+          <h3 class="text-lg font-semibold mb-2">Incident Trends</h3>
+          <canvas id="incidentChart" class="w-full h-64"></canvas>
+        </div>
+
+        <div class="bg-white p-4 rounded-md shadow-md">
+          <h3 class="text-lg font-semibold mb-2">Response Time</h3>
+          <canvas id="responseTimeChart" class="w-full h-64"></canvas>
+        </div>
+
+        <div class="bg-white p-4 rounded-md shadow-md">
+          <h3 class="text-lg font-semibold mb-2">Incident Types</h3>
+          <canvas id="incidentTypeChart" class="w-full h-64"></canvas>
+        </div>
+      </div>
+
+    <!-- Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <!-- Total Incidents -->
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold">Total Incidents</h3>
+      <i class="fas fa-fire text-red-500"></i>
+    </div>
+    <p class="text-3xl font-bold mt-2" id="total-incidents">...</p>
+    <p class="text-sm text-gray-500" id="total-incidents-trend">Includes all incident types</p>
+  </div>
+
+  <!-- Total Resolved Reports -->
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold">Total Resolved Reports</h3>
+      <i class="fas fa-check-circle text-green-500"></i>
+    </div>
+    <p class="text-3xl font-bold mt-2" id="total-resolved">0</p>
+    <p class="text-sm text-gray-500">Marked as Resolved</p>
+  </div>
+
+  <!-- Total Canceled Reports -->
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold">Total Canceled Reports</h3>
+      <i class="fas fa-times-circle text-red-500"></i>
+    </div>
+    <p class="text-3xl font-bold mt-2" id="total-canceled">0</p>
+    <p class="text-sm text-gray-500">Marked as Canceled</p>
+  </div>
+
+  <!-- Average Response Time -->
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold">Avg Response Time</h3>
+      <i class="fas fa-clock text-yellow-500"></i>
+    </div>
+    <p class="text-3xl font-bold mt-2" id="avg-response-time">...</p>
+    <p class="text-sm text-gray-500" id="response-trend">Loading...</p>
+  </div>
+
+  <!-- Active Volunteers -->
+  <div class="bg-white p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold">Active Volunteers</h3>
+      <i class="fas fa-users text-blue-500"></i>
+    </div>
+    <p class="text-3xl font-bold mt-2" id="active-volunteers">...</p>
+    <p class="text-sm text-gray-500" id="volunteer-info">Loading...</p>
+  </div>
+
+</div>
+
+
+  <!-- Firebase + Chart Data Logic -->
+  <script type="module" src="scripts/analytics.js"></script>
+</body>
+</html>

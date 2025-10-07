@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+ 
+    <script
+      type="module"
+      src="/scripts/history.js"
+      defer
+    ></script>
+ 
+    <!--Darkmode and Language-->
+    <script type="module" src="/scripts/darkmode.js"></script>
+    <script type="module" src="/scripts/language.js"></script>
+ 
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&displ…"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+      }
+      #national-park {
+        font-family: "National Park", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #4f46e5;
+      }
+      input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+      .dark-mode {
+        background-color: #1a202c;
+        color: #e2e8f0;
+      }
+      .dark-mode .bg-white {
+        background-color: #2d3748;
+      }
+      .dark-mode .text-gray-500 {
+        color: #a0aec0;
+      }
+      .dark-mode .bg-gray-200 {
+        background-color: #4a5568;
+      }
+      .dark-mode select {
+        background-color: #2d3748;
+        color: #cbd5e0;
+      }
+      .dark-mode .no-dark-mode {
+        background-color: #e2e8f0;
+        color: #4a5568;
+      }
+      .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      /* Overlay background when sidebar is open on mobile */
+      #overlay {
+        background: rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+ 
+  <body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <!-- Mobile Sidebar Toggle -->
+    <button
+      id="sidebarToggle"
+      class="md:hidden fixed top-4 left-4 z-50 p-3 bg-[#9F2424] text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-700"
+      aria-label="Open sidebar"
+    >
+      <i class="fas fa-bars text-lg"></i>
+    </button>
+ 
+    <!-- Sidebar Backdrop (mobile only) -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden md:hidden"
+    ></div>
+ 
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed top-0 left-0 h-full w-72 bg-[#9F2424] dark:bg-gray-800 text-white w-64 p-4 flex flex-col z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 md:flex shadow-2xl"
+      aria-label="Sidebar Navigation"
+    >
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-4">
+        <a
+          href="/src/dashboard.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-users"></i>
+          <span id="sidebar-emergency" id="national-park"
+            >Emergency Reports</span
+          >
+        </a>
+        <a
+          href="/src/history.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-history"></i>
+          <span id="sidebar-history" id="national-park">History</span>
+        </a>
+        <a
+          href="/src/analytics_and_reports.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-chart-bar"></i>
+          <span id="sidebar-analytics" id="national-park"
+            >Analytics and Reports</span
+          >
+        </a>
+ 
+        <a
+          href="/src/announcement.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-bullhorn"></i>
+          <span id="sidebar-announcements">Announcements</span>
+        </a>
+ 
+        <a
+          href="/src/user-management.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-user-cog"></i>
+          <span id="sidebar-users" id="national-park">User Management</span>
+        </a>
+      </nav>
+      <div class="mt-auto space-y-3 pt-6 border-t border-white/30">
+        <a
+          href="/src/Settings.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-cog"></i>
+          <span id="sidebar-settings" id="national-park">Settings</span>
+        </a>
+        <a
+          href="/src/admin.html"
+          class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+        >
+          <i class="fas fa-user-shield"></i>
+          <span id="sidebar-admin" id="national-park">Admin</span>
+        </a>
+      </div>
+    </aside>
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:ml-72 bg-gray-100 dark:bg-gray-900">
+      <!-- Mobile top bar -->
+      <header
+        class="bg-white p-4 flex items-center justify-between border-b md:hidden fixed top-0 left-0 right-0 z-30"
+      >
+        <button
+          id="sidebar-toggle"
+          aria-label="Open sidebar"
+          class="text-2xl text-gray-700 focus:outline-none"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="text-xl font-bold" id="page-title">Report History</h1>
+        <div></div>
+      </header>
+ 
+      <main
+        id="main-content"
+        class="pt-20 p-4 md:p-6 overflow-auto min-h-[calc(100vh-4rem)] bg-gray-100 dark:bg-gray-900"
+      >
+        <!-- Toolbar -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6"
+        >
+          <!-- Sort Dropdown -->
+          <div class="relative w-full md:w-60" id="national-park"></div>
+        </div>
+ 
+        <!-- Table -->
+        <div
+          class="overflow-x-auto rounded-2xl shadow-lg bg-white dark:bg-gray-800 p-2 md:p-6"
+        >
+          <!-- Header Row with History Title, Sort, and Export -->
+          <!-- Header Row with History Title, Sort, and Export -->
+          <div
+            class="flex flex-col md:flex-row justify-between items-center mb-4"
+          >
+            <!-- Title -->
+            <h2
+              class="text-2xl font-bold text-gray-900 dark:text-white mb-4 md:mb-0"
+            >
+              History
+            </h2>
+ 
+            <!-- Right-side controls -->
+            <div class="flex flex-col md:flex-row gap-3">
+              <!-- Sort Dropdown -->
+              <div class="relative w-full md:w-60" id="national-park">
+                <select
+                  id="sortFilter"
+                  class="w-full appearance-none px-4 py-2.5 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#9F2424] cursor-pointer"
+                >
+                  <option disabled selected hidden id="sort-label">
+                    Sort by
+                  </option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
+                >
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+              </div>
+ 
+              <!-- Export Button -->
+              <button
+                id="exportPdfBtn"
+                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#9F2424] active:scale-95"
+              >
+                <i class="fas fa-file-pdf mr-2"></i> Export PDF
+              </button>
+            </div>
+          </div>
+ 
+          <!-- Table -->
+          <table
+            class="w-full min-w-[600px] text-sm md:text-base rounded-lg overflow-hidden"
+            id="historyTable"
+          >
+            <thead class="bg-[#9F2424] text-white">
+              <tr>
+                <th class="p-3 text-center">Type of Incident</th>
+                <th class="p-3 text-center">User</th>
+                <th class="p-3 text-center">Description</th>
+                <th class="p-3 text-center">Occurrence Date</th>
+                <th class="p-3 text-center">Status</th>
+                <th class="p-3 text-center">Details</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-100 dark:bg-gray-700 divide-y divide-gray-300 dark:divide-gray-600 text-gray-900 dark:text-white">
+            <tr>
+              <td class="p-3 text-center">Fire</td>
+              <td class="p-3 text-center">Jy</td>
+              <td class="p-3 text-center">may sunog sa purok 2</td>
+              <td class="p-3 text-center">6/9/2025, 1:25:45 PM</td>
+              <td class="p-3 text-center">
+                <span class="bg-green-500 text-white px-2 py-1 rounded">Resolved</span>
+              </td>
+              <td class="p-3 text-center">
+                <button class="bg-red-600 text-white px-3 py-1 rounded">View</button>
+              </td>
+            </tr>
+          </tbody>
+          </table>
+ 
+          <!-- Modal -->
+ <!-- Modal -->
+<div
+  id="detailsModal"
+  class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity opacity-0"
+>
+  <div
+    class="bg-white rounded-lg p-6 max-w-lg w-full transform transition-transform scale-95"
+  >
+    <button
+      id="closeModal"
+      class="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+    >
+      ✖
+    </button>
+    <div id="modalContent" class="space-y-2">
+      <!-- Dynamic content goes here -->
+    </div>
+  </div>
+</div>
+
+        </div>
+      </main>
+    </div>
+ 
+    <script>
+      // Sidebar toggle for mobile
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+      const toggleButton = document.getElementById("sidebar-toggle");
+ 
+      sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("-translate-x-full");
+        backdrop.classList.toggle("hidden");
+      });
+ 
+      backdrop.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+        backdrop.classList.add("hidden");
+      });
+ 
+      // Also allow the header hamburger to open sidebar
+      if (toggleButton) {
+        toggleButton.addEventListener("click", () => {
+          sidebar.classList.toggle("-translate-x-full");
+          backdrop.classList.toggle("hidden");
+        });
+ 
+        // Close sidebar on window resize if screen is >= md breakpoint
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768) {
+            sidebar.classList.remove("-translate-x-full");
+            overlay.classList.add("hidden");
+          } else {
+            sidebar.classList.add("-translate-x-full");
+          }
+        });
+ 
+        const darkToggle = document.getElementById("darkToggle");
+        darkToggle.addEventListener("change", () => {
+          if (darkToggle.checked) {
+            document.body.classList.add("dark-mode");
+          } else {
+            document.body.classList.remove("dark-mode");
+          }
+        });
+      }
+    </script>
+ 
+    <!-- PDF Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </body>
+</html>
+ 

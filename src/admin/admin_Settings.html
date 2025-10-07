@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+      }
+      #national-park {
+        font-family: "National Park", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #4f46e5;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+
+.dark-mode {
+  background-color: #1a202c;
+  color: #e2e8f0;
+}
+.dark-mode h1.text-3xl {
+  color: #2b5c9c;
+}
+
+      .dark-mode .bg-white {
+        background-color: #2d3748;
+      }
+
+      .dark-mode .text-gray-500 {
+        color: #a0aec0;
+      }
+
+      .dark-mode .bg-gray-200 {
+        background-color: #4a5568;
+      }
+
+      .dark-mode select {
+        background-color: #2d3748;
+        color: #cbd5e0;
+      }
+
+      .dark-mode .no-dark-mode {
+        background-color: #e2e8f0;
+        color: #4a5568;
+      }
+
+      .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", async () => {
+        const analyticsLink = document.getElementById("analytics-link");
+        const userManagementLink = document.getElementById("user-management-link");
+
+        // Simulate fetching user role (Replace with Firebase logic)
+        let userRole = "viewer"; // Example role, should be retrieved dynamically
+
+        if (userRole !== "admin") {
+          analyticsLink.classList.add("disabled");
+          userManagementLink.classList.add("disabled");
+
+          // Remove href attributes to prevent navigation
+          analyticsLink.removeAttribute("href");
+          userManagementLink.removeAttribute("href");
+        }
+      });
+    </script>
+  </head>
+ <body class="bg-gray-100 h-screen" id="page">
+    <!-- Mobile Sidebar Toggle -->
+    <button id="sidebarToggle"
+      class="md:hidden fixed top-4 left-4 z-50 p-3 bg-[#9F2424] text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-red-700"
+      aria-label="Open sidebar">
+      <i class="fas fa-bars text-lg"></i>
+    </button>
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden md:hidden"></div>
+    <!-- Sidebar Backdrop (mobile only) -->
+     <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-40 z-30 hidden md:hidden"></div>
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+<aside
+        id="sidebar"
+        class="fixed top-0 left-0 h-full w-64 bg-[#9F2424] text-white p-4 flex flex-col z-20
+transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
+        aria-label="Sidebar Navigation"
+      >
+        <div class="flex items-center pb-8">
+          <i class="fas fa-plus-circle text-2xl pr-3"></i>
+          <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+        </div>
+
+        <nav class="flex flex-col gap-5">
+          <a
+            href="/src/admin/admin_dashboard.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            ><i class="fas fa-users"></i>
+            <span id="national-park">Emergency Reports</span></a
+          >
+          <a
+            href="/src/admin/admin_volunteers.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            ><i class="fas fa-user-shield"></i>
+            <span id="national-park">Volunteers</span></a
+          >
+          <a
+            href="/src/admin/admin_history.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            ><i class="fas fa-history"></i>
+            <span id="national-park">History</span></a
+          >
+          <a
+            href="/src/admin/admin_analytics_and_reports.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            id="analytics-link"
+            ><i class="fas fa-chart-bar"></i>
+            <span id="national-park">Analytics & Reports</span></a
+          >
+          <a
+            href="/src/admin/admin_user-management.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            id="user-management-link"
+            ><i class="fas fa-user-cog"></i>
+            <span id="national-park">User Management</span></a
+          >
+        </nav>
+
+        <div class="mt-auto space-y-4 pt-6 border-t border-white/30">
+          <a
+            href="/src/admin/admin_Settings.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            ><i class="fas fa-cog"></i>
+            <span id="national-park">Settings</span></a
+          >
+          <a
+            href="/src/admin/admin_admin.html"
+            class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            ><i class="fas fa-user-shield"></i>
+            <span id="national-park">Admin</span></a
+          >
+        </div>
+      </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:ml-72 transition-all duration-300 ease-in-out">
+      <!-- Mobile top bar -->
+      <header
+        class="bg-white p-4 flex items-center justify-between border-b md:hidden fixed top-0 left-0 right-0 z-30"
+      >
+        <button
+          id="sidebar-toggle"
+          aria-label="Open sidebar"
+          aria-expanded="false"
+          aria-controls="sidebar"
+          class="text-2xl text-gray-700 focus:outline-none"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="text-xl font-bold" id="page-title">Settings</h1>
+        <div></div>
+      </header>
+
+      <main
+        id="main-content"
+        class="pt-16 p-4 sm:p-6 overflow-auto min-h-[calc(100vh-4rem)]"
+      >
+        <h1
+          class="text-3xl font-bold mb-6 hidden md:block text-center"
+          id="page-title-desktop"
+        >
+          Settings
+        </h1>
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-lg space-y-6">
+          <!-- Dark Mode -->
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+            <span id="dark-mode-label" class="font-medium text-gray-700">Dark Mode</span>
+            <label class="switch">
+              <input type="checkbox" id="darkToggle" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Language -->
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+            <span id="language-label" class="font-medium text-gray-700">Language</span>
+            <select id="languageSelect" class="border p-2 rounded focus:ring-2 focus:ring-red-700">
+              <option value="en">English</option>
+              <option value="fil">Filipino</option>
+            </select>
+          </div>
+
+          <!-- Notifications -->
+          <div class="mt-6">
+            <h2 id="notif-title" class="text-lg font-semibold mb-4 text-red-700">
+              Notification Preferences
+            </h2>
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-3 gap-2">
+              <span id="email-alerts-label" class="font-medium text-gray-700">Email Alerts</span>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-10 space-y-4">
+            <button
+              id="logout-button"
+              onclick="window.location.href='/src/index.html'"
+              class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 text-lg font-semibold transition"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Sidebar toggle logic for mobile
+      const sidebar = document.getElementById("sidebar");
+      const toggleButton = document.getElementById("sidebar-toggle");
+      const overlay = document.getElementById("overlay");
+
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        overlay.classList.remove("hidden");
+        toggleButton.setAttribute("aria-expanded", "true");
+      }
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+        toggleButton.setAttribute("aria-expanded", "false");
+      }
+
+      toggleButton.addEventListener("click", () => {
+        if (sidebar.classList.contains("-translate-x-full")) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      // Clicking overlay closes sidebar on mobile
+      overlay.addEventListener("click", () => {
+        closeSidebar();
+      });
+
+      // Close sidebar on window resize if screen is >= md breakpoint
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) {
+          sidebar.classList.remove("-translate-x-full");
+          overlay.classList.add("hidden");
+          toggleButton.setAttribute("aria-expanded", "true");
+        } else {
+          sidebar.classList.add("-translate-x-full");
+          overlay.classList.add("hidden");
+          toggleButton.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Initialize sidebar state on page load
+      window.addEventListener("load", () => {
+        if (window.innerWidth >= 768) {
+          sidebar.classList.remove("-translate-x-full");
+          overlay.classList.add("hidden");
+          toggleButton.setAttribute("aria-expanded", "true");
+        } else {
+          sidebar.classList.add("-translate-x-full");
+          overlay.classList.add("hidden");
+          toggleButton.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Dark mode toggle (optional, if you want to persist)
+      const darkToggle = document.getElementById("darkToggle");
+      const page = document.getElementById("page");
+
+      darkToggle.addEventListener("change", () => {
+        if (darkToggle.checked) {
+          page.classList.add("dark-mode");
+        } else {
+          page.classList.remove("dark-mode");
+        }
+      });
+
+      // Sidebar toggle for mobile (hamburger)
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar2 = document.getElementById("sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+
+      sidebarToggle.addEventListener("click", () => {
+        sidebar2.classList.toggle("-translate-x-full");
+        backdrop.classList.toggle("hidden");
+      });
+
+      backdrop.addEventListener("click", () => {
+        sidebar2.classList.add("-translate-x-full");
+        backdrop.classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>

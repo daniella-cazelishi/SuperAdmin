@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteers</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {},
+      },
+    };
+  </script>
+
+  <!-- EmailJS library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!-- EmailJS initialization -->
+  <script type="text/javascript">
+    (function () {
+      emailjs.init({
+        publicKey: "ytDuYnv-VYSRdIwm4",
+      });
+    })();
+  </script>
+
+  <!-- Your custom admin logic -->
+  <script src="scripts/admin.js" type="module" defer></script>
+
+  <!-- Fonts and Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+      font-weight: 600;
+    }
+
+    #national-park {
+      font-family: "National Park", sans-serif;
+    }
+
+    /* Switch Toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #f56565;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(14px);
+    }
+
+    /* Dropdown */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 h-screen">
+  <div class="flex h-full">
+    <!-- Sidebar -->
+      <aside class="bg-[#9F2424] text-white w-64 p-4 flex flex-col sidebar">
+        <div class="flex items-center pb-8">
+          <i class="fas fa-plus-circle text-2xl pr-3"></i>
+          <span class="text-3xl font-bold" id="radio-canada-big"
+            >Bantay 72</span
+          >
+        </div>
+        <nav class="flex flex-col gap-5">
+          <a
+            href="/src/admin/admin_dashboard.html"
+            class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="Emergency Reports"
+          >
+            <i class="fas fa-users"></i>
+            <span id="national-park">Emergency Reports</span>
+          </a>
+          <a
+            href="/src/admin/admin_volunteers.html"
+            class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="Volunteers"
+          >
+            <i class="fas fa-user-shield"></i>
+            <span id="national-park">Volunteers</span>
+          </a>
+          <a
+            href="/src/admin/admin_history.html"
+            class="items-center flex flex-row gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="History"
+      >
+            <i class="fas fa-history" aria-hidden="true"></i>
+            <span id="national-park">History</span>
+            </a>
+          <a
+            href="/src/admin/admin_analytics_and_reports.html"
+            class="items-center flex flex-row gap-5 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="Analytics and Reports"
+          >
+            <i class="fas fa-chart-bar"></i>
+            <span id="national-park">Analytics & Reports</span>
+          </a>
+          <a
+            href="/src/admin/admin_user-management.html"
+            class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="User  Management"
+          >
+            <i class="fas fa-user-cog"></i>
+            <span id="national-park">User Management</span>
+          </a>
+        </nav>
+        <div class="space-y-4 mt-auto">
+          <a
+            href="/src/admin/admin_Settings.html"
+            class="items-center flex flex-row gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="Settings"
+          >
+            <i class="fas fa-cog"></i>
+            <span id="national-park">Settings</span>
+          </a>
+          <a
+            href="/src/admin/admin_admin.html"
+            class="flex flex-row gap-3 items-center p-2 hover:bg-white hover:text-red-700 rounded-md transition"
+            aria-label="Admin"
+          >
+            <i class="fas fa-user-shield"></i>
+            <span id="national-park">Admin</span>
+          </a>
+        </div>
+      </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-2xl font-bold">User Management</h1>
+        </div>
+
+        <!-- Pending Residents Section -->
+        <section>
+          <h2 class="text-xl font-bold mb-4">Pending Residents</h2>
+          <div class="overflow-x-auto max-h-[300px] overflow-y-auto shadow-lg">
+            <table class="w-full bg-white">
+              <thead class="bg-[#9c2626] text-white">
+                <tr>
+                  <th class="p-3">Fullname</th>
+                  <th class="p-3">Address</th>
+                  <th class="p-3">Phone</th>
+                  <th class="p-3">Email</th>
+                  <th class="p-3">Date Registered</th>
+                  <th class="p-3">Files</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="loading-row">
+                  <td colspan="7" class="p-3 text-center text-gray-500">
+                    Loading reports...
+                  </td>
+                </tr>
+                <tr id="no-data-row" class="hidden">
+                  <td colspan="7" class="p-3 text-center text-gray-500">
+                    No pending users available as of the moment
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal for File Preview -->
+  <div id="fileModal" class="modal items-center justify-center hidden">
+    <div class="modal-content relative">
+      <span class="close absolute top-2 right-4 cursor-pointer">&times;</span>
+      <div id="filePreview"></div>
+    </div>
+  </div>
+</body>
+
+</html>

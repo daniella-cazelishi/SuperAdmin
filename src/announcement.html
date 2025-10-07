@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcements</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- JS functions -->
+    <script type="module" src="/scripts/modal.js"></script>
+    <script type="module" src="/scripts/language.js"></script>
+    <script type="module" src="/scripts/darkmode.js"></script>
+    <!-- <script
+      type="module"
+      src="/scripts/announcements.js"
+      defer
+    ></script> -->
+    <script
+      type="module"
+      src="/scripts/announcements.js"
+    ></script>
+
+    <style>
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-screen"
+  >
+    <div class="flex h-full">
+      <!-- Sidebar -->
+      <aside
+        class="bg-[#9F2424] dark:bg-gray-800 text-white w-64 p-4 flex flex-col"
+      >
+        <div class="flex items-center pb-8">
+          <i class="fas fa-plus-circle text-3xl pr-3 text-white"></i>
+          <span class="text-3xl font-extrabold" id="radio-canada-big">
+            Bantay 72
+          </span>
+        </div>
+
+        <nav class="flex flex-col gap-3">
+          <a
+            href="/src/dashboard.html"
+            class="flex items-center gap-4 p-3 rounded-lg font-semibold hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-400 transition"
+          >
+            <i class="fas fa-users text-lg"></i>
+            <span id="sidebar-emergency">Emergency Reports</span>
+          </a>
+          <a
+            href="/src/history.html"
+            class="flex items-center gap-4 p-3 rounded-lg font-semibold hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-400 transition"
+          >
+            <i class="fas fa-history text-lg"></i>
+            <span id="sidebar-history">History</span>
+          </a>
+          <a
+            href="/src/analytics_and_reports.html"
+            class="flex items-center gap-4 p-3 rounded-lg font-semibold hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-400 transition"
+          >
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span id="sidebar-analytics">Analytics & Reports</span>
+          </a>
+          
+          <a href="/src/announcement.html"
+            class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+            <i class="fas fa-bullhorn"></i>
+            <span id="sidebar-announcements">Announcements</span>
+          </a>
+          <a
+            href="/src/user-management.html"
+            class="flex items-center gap-4 p-3 rounded-lg font-semibold hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-400 transition"
+          >
+            <i class="fas fa-user-cog text-lg"></i>
+            <span id="sidebar-users">User Management</span>
+          </a>
+        </nav>
+        <div class="mt-auto space-y-3 pt-6 border-t border-white/30">
+          <a
+            href="/src/Settings.html"
+            class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+          >
+            <i class="fas fa-cog"></i>
+            <span id="sidebar-settings">Settings</span>
+          </a>
+          <a
+            href="/src/admin.html"
+            class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+          >
+            <i class="fas fa-user-shield"></i>
+            <span id="sidebar-admin">Admin</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h2
+              id="announcements-title"
+              class="text-3xl font-extrabold dark:text-gray-100"
+            >
+              Announcements
+            </h2>
+            <p
+              id="announcements-subtitle"
+              class="text-gray-600 dark:text-gray-400 text-sm font-medium"
+            >
+              0 Messages
+            </p>
+          </div>
+          <button
+            id="newMessageBtn"
+            class="bg-blue-700 text-white text-sm px-6 py-3 font-semibold rounded-lg hover:bg-blue-800 shadow-lg"
+          >
+            New Announcement
+          </button>
+        </div>
+
+        <div
+          class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden"
+        >
+          <table
+            class="w-full text-left border-collapse text-gray-900 dark:text-gray-100"
+          >
+            <thead
+              class="bg-gray-200 dark:bg-gray-700 border-b text-gray-800 dark:text-gray-200"
+            >
+              <tr>
+                <th
+                  id="th-announcement-title"
+                  class="px-6 py-4 text-base font-bold"
+                >
+                  Title
+                </th>
+                <th
+                  id="th-announcement-category"
+                  class="px-6 py-4 text-base font-bold"
+                >
+                  Category
+                </th>
+                <th
+                  id="th-announcement-message"
+                  class="px-6 py-4 text-base font-bold"
+                >
+                  Message
+                </th>
+                <th
+                  id="th-announcement-image"
+                  class="px-6 py-4 text-base font-bold"
+                >
+                  Image
+                </th>
+                <th
+                  id="th-announcement-date"
+                  class="px-6 py-4 text-base font-bold"
+                >
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="divide-y divide-gray-300 dark:divide-gray-600 text-sm font-medium"
+              id="announcementTableBody"
+            ></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal -->
+    <div
+      id="announcementModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm hidden"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 border border-gray-200 dark:border-gray-600"
+      >
+        <h2
+          id="create-announcement-title"
+          class="text-2xl font-extrabold mb-6 text-gray-900 dark:text-gray-100"
+        >
+          Create Announcement
+        </h2>
+
+        <!-- Title -->
+        <div class="mb-5">
+          <label
+            id="label-announcement-title"
+            class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300"
+            >Title</label
+          >
+          <input
+            type="text"
+            id="announcementTitle"
+            class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+          />
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="mb-5">
+          <label
+            id="label-announcement-category"
+            class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300"
+            >Category</label
+          >
+          <select
+            id="announcementCategory"
+            class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+          >
+            <option value="">--Select Category--</option>
+            <option value="Health & Safety">Health & Safety</option>
+            <option value="Community Events">Community Events</option>
+            <option value="Lost & Found">Lost & Found</option>
+            <option value="Neighborhood Concerns">Neighborhood Concerns</option>
+            <option value="Infrastructure Issues">Infrastructure Issues</option>
+            <option value="Education & Youth">Education & Youth</option>
+            <option value="Environment & Cleanliness">
+              Environment & Cleanliness
+            </option>
+          </select>
+        </div>
+
+        <!-- Message -->
+        <div class="mb-5">
+          <label
+            id="label-announcement-message"
+            class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300"
+            >Message</label
+          >
+          <textarea
+            id="announcementMessage"
+            rows="5"
+            class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+          ></textarea>
+        </div>
+
+        <!-- Image Upload with Preview -->
+        <div class="mb-6">
+          <label
+            id="label-announcement-upload"
+            class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300"
+            >Upload Image (optional)</label
+          >
+          <div class="flex items-center gap-4">
+            <!-- File input styled as button -->
+            <label
+              for="fileInput"
+              id="label-choose-file"
+              class="cursor-pointer bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 py-2 rounded-lg text-sm font-medium text-gray-900 dark:text-gray-100 transition"
+              >Choose File</label
+            >
+            <span id="fileName">No file chosen</span>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" class="hidden" />
+          <!-- Preview -->
+          <img
+            id="imagePreview"
+            src=""
+            alt="Preview"
+            class="mt-3 hidden h-32 w-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+          />
+        </div>
+        
+
+        <!-- Buttons -->
+        <div class="flex justify-end space-x-3">
+          <button id="saveBtn" type="button">Save</button>
+<button id="cancelBtn" type="button">Cancel</button>
+
+          <!-- <button id="cancelBtn">Cancel</button>
+          <button id="saveBtn">Save</button> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

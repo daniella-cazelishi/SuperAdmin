@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Settings</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: { extend: {} },
+      };
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=National+Park:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      #radio-canada-big { font-family: "Radio Canada Big", sans-serif; }
+      #national-park { font-family: "National Park", sans-serif; }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+      }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider { background-color: #4f46e5; }
+      input:checked + .slider:before { transform: translateX(18px); }
+    </style>
+  </head>
+
+  <body
+    class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100 h-screen transition-colors duration-300"
+    id="page"
+  >
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed top-0 left-0 h-full w-72 bg-[#9F2424] dark:bg-gray-800 text-white w-64 p-4 flex flex-col z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 md:flex shadow-2xl"
+      aria-label="Sidebar Navigation"
+    >
+      <div class="flex items-center pb-8">
+        <i class="fas fa-plus-circle text-2xl pr-3"></i>
+        <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+      </div>
+      <nav class="flex flex-col gap-4">
+        <a href="/src/dashboard.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-users"></i>
+          <span id="sidebar-emergency-reports" id="national-park">Emergency Reports</span>
+        </a>
+        <a href="/src/history.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-history"></i>
+          <span id="sidebar-history" id="national-park">History</span>
+        </a>
+        <a href="/src/analytics_and_reports.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-chart-bar"></i>
+          <span id="sidebar-analytics-reports" id="national-park">Analytics & Reports</span>
+        </a>
+
+        <a href="/src/announcement.html"
+            class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+            <i class="fas fa-bullhorn"></i>
+            <span id="sidebar-announcements">Announcements</span>
+          </a>
+
+        <a href="/src/user-management.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-user-cog"></i>
+          <span id="sidebar-user-management" id="national-park">User Management</span>
+        </a>
+        
+      </nav>
+      <div class="mt-auto space-y-3 pt-6 border-t border-white/30">
+        <a href="/src/Settings.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-cog"></i>
+          <span id="sidebar-settings" id="national-park">Settings</span>
+        </a>
+        <a href="/src/admin.html" class="flex items-center gap-4 p-3 rounded-lg hover:bg-white hover:text-red-700 dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+          <i class="fas fa-user-shield"></i>
+          <span id="sidebar-admin" id="national-park">Admin</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:ml-72 transition-all duration-300 ease-in-out">
+      <!-- Header -->
+      <header class="bg-white dark:bg-gray-800 p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 md:hidden fixed top-0 left-0 right-0 z-30">
+        <button id="sidebar-toggle" class="text-2xl text-gray-700 dark:text-gray-200">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="text-xl font-bold">Settings</h1>
+        <div></div>
+      </header>
+
+      <main class="pt-16 p-4 sm:p-6 overflow-auto min-h-[calc(100vh-4rem)]">
+        <h1 id="main-title" class="text-3xl font-bold mb-6 hidden md:block text-center">
+          Settings
+        </h1>
+
+        <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 dark:text-gray-200 p-6 rounded-2xl shadow-lg space-y-6">
+          <!-- Dark Mode -->
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+            <span id="label-darkmode" class="font-medium text-gray-700 dark:text-gray-300">Dark Mode</span>
+            <label class="switch">
+              <input type="checkbox" id="darkToggle" />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Language -->
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+            <span id="label-language" class="font-medium text-gray-700 dark:text-gray-300">Language</span>
+            <select id="languageSelect" class="border p-2 rounded focus:ring-2 focus:ring-red-700 dark:bg-gray-700 dark:text-gray-100">
+              <option value="en">English</option>
+              <option value="fil">Filipino</option>
+            </select>
+          </div>
+
+          <!-- Notifications -->
+          <div class="mt-6">
+            <h2 id="label-notification-preferences" class="text-lg font-semibold mb-4 text-red-700 dark:text-red-400">Notification Preferences</h2>
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-3 gap-2">
+              <span id="label-email" class="font-medium text-gray-700 dark:text-gray-300">Email Alerts</span>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+        
+
+          <!-- Actions -->
+          <div class="mt-10 space-y-4">
+            <button id="logout-button" onclick="window.location.href='index.html'" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 text-lg font-semibold transition">Log Out</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    
+
+    <!-- Scripts -->
+    <script src="/scripts/darkmode.js"></script>
+    <script src="/scripts/language.js"></script>
+  </body>
+</html>

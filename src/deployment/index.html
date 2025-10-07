@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login | Bantay 72</title>
+
+    <!-- Tailwind CSS and FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- Load login.js as module -->
+    <script type="module" src="/src/scripts/login.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@400;800&display=swap" rel="stylesheet" />
+
+    <style>
+      body {
+        background: linear-gradient(to bottom right, #8b0000, #b71c1c, #d32f2f);
+      }
+
+      .pattern-box {
+        background: #d4c4a4;
+        clip-path: polygon(0% 0%, 70% 0%, 100% 30%, 100% 100%, 30% 100%, 0% 70%);
+      }
+
+      #radio-canada-big {
+        font-family: "Radio Canada Big", sans-serif;
+        font-weight: 600;
+      }
+
+      #national-park {
+        font-family: "National Park", sans-serif;
+        font-style: italic;
+      }
+
+      .input-field {
+        border-radius: 30px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .input-field:focus {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+      }
+
+      .clock {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        z-index: 50;
+      }
+    </style>
+
+    <script>
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const eyeIcon = document.getElementById("eye-icon");
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString();
+        document.getElementById("clock").textContent = timeString;
+      }
+
+      setInterval(updateClock, 1000);
+      window.onload = updateClock;
+    </script>
+  </head>
+
+  <body class="flex items-center justify-center h-screen overflow-hidden">
+    <div id="clock" class="clock">Loading...</div>
+
+    <div class="flex w-3/5 h-full">
+      <div class="w-1/2 pattern-box flex flex-col items-center justify-center p-8 relative">
+        <img src="images/bnt.png" alt="Bantay 72 Logo" class="w-24 mb-4" />
+        <h1 id="radio-canada-big" class="text-3xl font-extrabold text-red-800">Welcome to Bantay 72</h1>
+        <p id="national-park" class="text-lg text-red-700 italic">"Alerto sa Sakuna, Kaligtasan ay Sigurado"</p>
+      </div>
+
+      <div class="w-1/2 flex flex-col justify-center items-center p-10">
+        <div class="w-full max-w-sm p-8 shadow-lg rounded-lg bg-white relative">
+          <h2 class="text-3xl font-bold text-center text-black-800" id="radio-canada-big">Admin</h2>
+
+          <form class="mt-6" id="login-form">
+            <div class="mb-4">
+              <input
+                type="text"
+                id="username"
+                class="w-full px-4 py-3 border border-red-600 input-field focus:border-red-800 focus:outline-none focus:ring-2 focus:ring-red-700 transition"
+                placeholder="Username"
+                required
+              />
+            </div>
+
+            <div class="mb-4 relative">
+              <input
+                type="password"
+                id="password"
+                class="w-full px-4 py-3 border border-red-600 input-field focus:border-red-800 focus:outline-none focus:ring-2 focus:ring-red-700 transition pr-10"
+                placeholder="Password"
+                required
+              />
+              <span class="absolute right-4 top-3 cursor-pointer text-gray-500" onclick="togglePassword()">
+                <i id="eye-icon" class="fas fa-eye"></i>
+              </span>
+            </div>
+
+            <div class="flex justify-between text-sm mb-4 text-gray-700">
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" /> Remember Me
+              </label>
+              <a href="#" id="forgot-password-link" class="text-red-700 hover:underline">Forgot Password?</a>
+            </div>
+
+            <button
+              type="submit"
+              id="submit"
+              class="w-full bg-[#9F2424] text-white flex justify-center py-3 px-6 rounded-lg hover:bg-red-900 transition"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div
+      id="forgot-password-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="bg-white rounded-lg p-6 w-80 shadow-lg relative">
+        <h3 class="text-xl font-bold mb-4 text-center">Reset Password</h3>
+        <label for="reset-email" class="block text-gray-700 mb-2">Enter your email:</label>
+        <input
+          id="reset-email"
+          type="email"
+          placeholder="you@example.com"
+          class="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-red-700"
+        />
+        <div class="flex justify-end space-x-3">
+          <button id="cancel-reset" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancel</button>
+          <button id="submit-reset" class="px-4 py-2 rounded bg-red-700 text-white hover:bg-red-800">Send Reset Link</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

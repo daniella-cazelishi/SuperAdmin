@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "bantay72-adminmori"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "bantay72-adminmori-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

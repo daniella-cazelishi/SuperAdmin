@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Only</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {},
+      },
+    };
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function () {
+      emailjs.init({
+        publicKey: "ytDuYnv-VYSRdIwm4",
+      });
+    })();
+  </script>
+  <script src="scripts/admin.js" type="module" defer></script>
+  <script src="scripts/script.js" defer></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=National+Park:wght@200;800&display=swap" rel="stylesheet" />
+
+  <style>
+    #radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+      font-weight: 600;
+    }
+
+    #national-park {
+      font-family: "National Park", sans-serif;
+      font-weight: 400;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="fixed top-0 left-0 h-full w-64 bg-[#9F2424] text-white p-4 flex flex-col z-10"
+    aria-label="Sidebar Navigation">
+    <div class="flex items-center pb-8">
+      <i class="fas fa-plus-circle text-2xl pr-3"></i>
+      <span class="text-3xl font-bold" id="radio-canada-big">Bantay 72</span>
+    </div>
+
+    <nav class="flex flex-col gap-5">
+      <a href="dashboard.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"><i
+          class="fas fa-users"></i>
+        <span id="national-park">Emergency Reports</span></a>
+      <a href="volunteers.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"><i
+          class="fas fa-user-shield"></i>
+        <span id="national-park">Volunteers</span></a>
+      <a href="history.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"><i
+          class="fas fa-history"></i>
+        <span id="national-park">History</span></a>
+      <a id="sidebar-analytics" href="analytics_and_reports.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+        <i class="fas fa-chart-bar"></i>
+        <span id="national-park">Analytics & Reports</span>
+      </a>
+
+      <a id="sidebar-user" href="user-management.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition">
+        <i class="fas fa-user-cog"></i>
+        <span id="national-park">User Management</span>
+      </a>
+
+    </nav>
+
+    <div class="mt-auto space-y-4 pt-6 border-t border-white/30">
+      <a href="Settings.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"><i
+          class="fas fa-cog"></i>
+        <span id="national-park">Settings</span></a>
+      <a href="admin.html"
+        class="flex items-center gap-4 p-2 hover:bg-white hover:text-red-700 rounded-md transition"><i
+          class="fas fa-user-shield"></i>
+        <span id="national-park">Super Admin</span></a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-64 p-6 min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h1 class="text-2xl font-bold mb-4">Super Admin Account</h1>
+      <div class="flex items-center">
+        <img src="images/adminprofile.jpg" alt="Profile picture of Admin" class="w-24 h-24 rounded-full mr-4" />
+        <div>
+          <h2 class="text-xl font-semibold">Super Admin</h2>
+          <p class="text-gray-600">Bantay 72</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vision, Mission, and Goals Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <article class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+        <h3 class="text-xl font-semibold mb-2 text-red-700">Vision</h3>
+        <p class="text-gray-700">
+          A safe, healthy, and progressive community where residents can live and work with dignity and opportunity.
+        </p>
+      </article>
+
+      <article class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+        <h3 class="text-xl font-semibold mb-2 text-red-700">Mission</h3>
+        <p class="text-gray-700">
+          To provide efficient and effective public services, promote community development, and ensure the well-being
+          of all residents through collaborative efforts and sustainable practices.
+        </p>
+      </article>
+
+      <article class="bg-white p-6 rounded-lg shadow-md border border-gray-200 md:col-span-2">
+        <h3 class="text-xl font-semibold mb-2 text-red-700">Goals</h3>
+        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+          <li><strong>Safety and Security:</strong> Ensuring a safe environment for residents through effective law
+            enforcement and community initiatives.</li>
+          <li><strong>Health and Well-being:</strong> Promoting health and wellness through access to healthcare,
+            sanitation, and public health programs.</li>
+          <li><strong>Community Development:</strong> Fostering economic opportunities, education, and social
+            development through various initiatives.</li>
+          <li><strong>Good Governance:</strong> Implementing transparent and accountable governance practices to ensure
+            public trust.</li>
+          <li><strong>Environmental Sustainability:</strong> Protecting and preserving the environment through
+            responsible resource management and conservation.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</body>
+
+</html>

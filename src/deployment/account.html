@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="css/output.css" rel="stylesheet">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:ital,wght@0,600;1,600&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <style>
+    .radio-canada-big {
+      font-family: "Radio Canada Big", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .poppins {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+    }
+
+    /* Table Styling */
+    .table-container {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #9f2424;
+      color: white;
+    }
+
+    .flagged {
+      background-color: #f8d7da;
+    }
+
+    .status-flagged {
+      background-color: red;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .action-validated {
+      background-color: orange;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+   /* Sidebar Hover Effect */
+   .sidebar-item {
+      background-color: white;
+      transition: background-color 0.3s ease-in-out, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .sidebar-item:hover {
+      background-color: #d9534f;
+      transform: scale(1.05);
+      color: white;
+    }
+
+    .active-sidebar-item {
+      background-color: #d9534f !important;
+      color: white !important;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebarItems = document.querySelectorAll(".sidebar-item");
+
+    sidebarItems.forEach(item => {
+      item.addEventListener("click", function () {
+        // Remove active class from all items
+        sidebarItems.forEach(item => item.classList.remove("active-sidebar-item"));
+
+        // Add active class to the clicked item
+        this.classList.add("active-sidebar-item");
+      });
+    });
+
+    const buttons = document.querySelectorAll(".action-validated");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const row = this.closest("tr");
+        const statusCell = row.querySelector(".status-flagged");
+
+        // Change the status text and color
+        statusCell.textContent = "Validated";
+        statusCell.style.backgroundColor = "green";
+        
+        // Remove the button after clicking
+        this.remove();
+      });
+    });
+  });
+</script>
+
+
+<body class="h-screen max-h-screen w-screen max-w-screen flex flex-row">
+  <!-- Sidebar -->
+<div class="bg-[#9f2424] flex-none w-2/11 flex flex-col p-4 rounded-r-lg">
+  <div class="flex flex-row gap-2 max-h-20 items-center pb-8">
+    <img src="/src/images/capstone_logo.png" alt="logo" class="size-11" />
+    <h1 class="text-white text-3xl radio-canada-big">Bantay 72</h1>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-2">
+    <img src="/src/images/ChartPieSlice.png" class="size-fit" alt="chart" />
+    <a href="index.html" class="text-[0.9em] poppins">Emergency Reports</a>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-2">
+    <img src="/src/images/Vector.png" class="size-fit" alt="chart" />
+    <a href="volunteers.html" class="text-[0.9em] poppins">Volunteers</a>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-2">
+    <img src="/src/images/FolderNotch.png" class="size-fit" alt="chart" />
+    <a href="analytics_and_reports.html" class="text-[0.8em] poppins">Analytics and Reports</a>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-53">
+    <img src="/src/images/IdentificationBadge.png" class="size-fit" alt="chart" />
+    <a href="account.html" class="text-[0.9em] poppins">Account</a>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-2">
+    <img src="/src/images/settings.png" class="size-fit" alt="chart" />
+    <a href="settings.html" class="text-[0.9em] poppins">Settings</a>
+  </div>
+
+  <div class="sidebar-item bg-white w-full p-3 text-start h-14 flex items-center gap-3 rounded-2xl mb-2">
+    <img src="/src/images/admin.png" class="size-fit" alt="chart" />
+    <a href="logins.html" class="text-[0.9em] poppins">Admin</a>
+  </div>
+</div>
+
+
+  <!-- Main Content -->
+  <div class="flex-auto flex-col pt-10 pl-5 pr-5">
+    <h1 class="poppins text-4xl mb-5">Account Settings</h1>
+
+    
+
+  </div>
+
+  <!-- Right Sidebar -->
+<div class="border-l-[1px] border-[#efefef] flex-none w-2/11 flex flex-col p-4">
+  
+  </div>
+</div>
