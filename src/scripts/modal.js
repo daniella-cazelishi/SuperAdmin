@@ -17,20 +17,20 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
-
+ 
 // --- Firebase Config ---
 const firebaseConfig = {
   apiKey: "AIzaSyBPtb60dthvTPLmaRlL_E7YOsBDIAK-vKw",
   authDomain: "sample-79b30.firebaseapp.com",
   projectId: "sample-79b30",
-  storageBucket: "sample-79b30.appspot.com",
+  storageBucket: "sample-79b30.firebasestorage.app",
   messagingSenderId: "12884863424",
   appId: "1:12884863424:web:277b044f4005f7d80fc025",
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
-
+ 
 // --- Elements ---
 const newMessageBtn = document.getElementById("newMessageBtn");
 const announcementModal = document.getElementById("announcementModal");
@@ -38,20 +38,22 @@ const cancelBtn = document.getElementById("cancelBtn");
 const saveBtn = document.getElementById("saveBtn");
 const messagesTable = document.getElementById("announcementTableBody");
 const messageCount = document.querySelector("main p");
-
+ 
 const titleInput = document.getElementById("announcementTitle");
 const categoryInput = document.getElementById("announcementCategory");
 const messageInput = document.getElementById("announcementMessage");
 const fileInput = document.getElementById("fileInput");
 const imagePreview = document.getElementById("imagePreview");
-
+ 
+const createTitle = document.getElementById("create-announcement-title");
+ 
 let currentEditingDocId = null;
-
+ 
 // --- Modal Functions ---
 function openModal(editing = false) {
   announcementModal.classList.remove("hidden");
   setTimeout(() => announcementModal.classList.add("opacity-100"), 10);
-
+ 
   if (!editing) {
     titleInput.value = "";
     categoryInput.value = "";
@@ -60,31 +62,36 @@ function openModal(editing = false) {
     imagePreview.src = "";
     imagePreview.classList.add("hidden");
     currentEditingDocId = null;
+    createTitle.textContent = "Create New Announcement";
+    saveBtn.textContent = "Save";
+  } else {
+    createTitle.textContent = "Update Announcement";
+    saveBtn.textContent = "Update";
   }
 }
-
+ 
 function closeModal() {
   announcementModal.classList.add("hidden");
   currentEditingDocId = null;
 }
-
+ 
 // --- Update Message Count ---
 function updateMessageCount() {
   messageCount.textContent = `${messagesTable.rows.length} Messages`;
 }
-
+ 
 // --- View Message ---
 function viewMessage(title, category, message, fileURL) {
   let msg = `Title: ${title}\nCategory: ${category}\nMessage: ${message}`;
   if (fileURL) msg += `\nImage URL: ${fileURL}`;
   alert(msg);
 }
-
+ 
 // --- Show Actions Menu ---
 function showActionsMenu(row, button, docId) {
   const existingMenu = document.querySelector(".actions-menu");
   if (existingMenu) existingMenu.remove();
-
+ 
   const menu = document.createElement("div");
   menu.className =
     "actions-menu absolute bg-white dark:bg-gray-800 shadow-md rounded-md p-2 z-50";
@@ -93,11 +100,11 @@ function showActionsMenu(row, button, docId) {
     <button class="block w-full text-left p-1 deleteBtn hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Delete</button>
   `;
   document.body.appendChild(menu);
-
+ 
   const rect = button.getBoundingClientRect();
   menu.style.top = rect.bottom + window.scrollY + "px";
   menu.style.left = rect.left + window.scrollX + "px";
-
+ 
   menu.querySelector(".updateBtn").addEventListener("click", () => {
     currentEditingDocId = docId;
     titleInput.value = row.querySelector("td.titleCell").textContent;
@@ -113,12 +120,12 @@ function showActionsMenu(row, button, docId) {
     openModal(true);
     menu.remove();
   });
-
+ 
   menu.querySelector(".deleteBtn").addEventListener("click", async () => {
     await deleteDoc(doc(db, "announcements", docId));
     menu.remove();
   });
-
+ 
   document.addEventListener(
     "click",
     (e) => {
@@ -127,7 +134,7 @@ function showActionsMenu(row, button, docId) {
     { once: true }
   );
 }
-
+ 
 // --- File Input Preview ---
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
@@ -143,19 +150,19 @@ fileInput.addEventListener("change", () => {
     imagePreview.classList.add("hidden");
   }
 });
-
+ 
 // --- Save Announcement ---
 saveBtn.addEventListener("click", async () => {
   const title = titleInput.value.trim();
   const category = categoryInput.value.trim();
   const message = messageInput.value.trim();
   const file = fileInput.files[0];
-
+ 
   if (!title || !category || !message)
     return alert("Please fill out all fields.");
-
+ 
   let fileURL = null;
-
+ 
   // Upload image safely
   if (file) {
     try {
@@ -173,7 +180,7 @@ saveBtn.addEventListener("click", async () => {
       fileURL = null;
     }
   }
-
+ 
   // Save to Firestore
   try {
     if (currentEditingDocId) {
@@ -193,38 +200,38 @@ saveBtn.addEventListener("click", async () => {
         timestamp: serverTimestamp(),
       });
     }
-
+ 
     closeModal();
   } catch (err) {
     console.error("Saving announcement failed:", err);
     alert("Failed to save announcement. Check console for errors.");
   }
 });
-
+ 
 // --- Load Announcements in Real-Time ---
 const q = query(collection(db, "announcements"), orderBy("timestamp", "desc"));
 onSnapshot(q, (querySnapshot) => {
   messagesTable.innerHTML = "";
-
+ 
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const row = messagesTable.insertRow();
-
+ 
     const formattedDate = data.timestamp
       ? data.timestamp.toDate().toLocaleString()
       : "Saving...";
-
+ 
     row.innerHTML = `
-      <td class="px-6 py-4 cursor-pointer titleCell">${data.title}</td>
-      <td class="px-6 py-4 cursor-pointer categoryCell">${data.category}</td>
-      <td class="px-6 py-4 cursor-pointer messageCell" data-message="${
+      <td class="px-6 py-4 titleCell">${data.title}</td>
+      <td class="px-6 py-4 categoryCell">${data.category}</td>
+      <td class="px-6 py-4 messageCell" data-message="${
         data.message
       }">${data.message}</td>
-      <td class="px-6 py-4">
+      <td class="px-6 flex justify-center py-4">
         ${
           data.fileURL
             ? `<img src="${data.fileURL}" class="h-12 w-12 object-cover rounded" />`
-            : ""
+            : "No Image"
         }
       </td>
       <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">${formattedDate}</td>
@@ -232,24 +239,24 @@ onSnapshot(q, (querySnapshot) => {
         <button type="button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-xl font-bold leading-none" title="Actions">⋮</button>
       </td>
     `;
-
+ 
     // Click to view
-    row
-      .querySelector("td.titleCell")
-      .addEventListener("click", () =>
-        viewMessage(data.title, data.category, data.message, data.fileURL)
-      );
-    row
-      .querySelector("td.categoryCell")
-      .addEventListener("click", () =>
-        viewMessage(data.title, data.category, data.message, data.fileURL)
-      );
-    row
-      .querySelector("td.messageCell")
-      .addEventListener("click", () =>
-        viewMessage(data.title, data.category, data.message, data.fileURL)
-      );
-
+    // row
+    //   .querySelector("td.titleCell")
+    //   .addEventListener("click", () =>
+    //     viewMessage(data.title, data.category, data.message, data.fileURL)
+    //   );
+    // row
+    //   .querySelector("td.categoryCell")
+    //   .addEventListener("click", () =>
+    //     viewMessage(data.title, data.category, data.message, data.fileURL)
+    //   );
+    // row
+    //   .querySelector("td.messageCell")
+    //   .addEventListener("click", () =>
+    //     viewMessage(data.title, data.category, data.message, data.fileURL)
+    //   );
+ 
     // Actions button
     const actionBtn = row.querySelector("button");
     actionBtn.addEventListener("click", (e) => {
@@ -257,13 +264,14 @@ onSnapshot(q, (querySnapshot) => {
       showActionsMenu(row, actionBtn, docSnap.id);
     });
   });
-
+ 
   updateMessageCount();
 });
-
+ 
 // --- Modal Events ---
 newMessageBtn.addEventListener("click", () => openModal());
 cancelBtn.addEventListener("click", closeModal);
 announcementModal.addEventListener("click", (e) => {
   if (e.target === announcementModal) closeModal();
 });
+ 

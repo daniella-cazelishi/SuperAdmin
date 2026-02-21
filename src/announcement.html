@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Announcements</title>
-
+ 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -15,13 +15,13 @@
         },
       };
     </script>
-
+ 
     <!-- FontAwesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-
+ 
     <!-- JS functions -->
     <script type="module" src="/scripts/modal.js"></script>
     <script type="module" src="/scripts/language.js"></script>
@@ -31,11 +31,8 @@
       src="/scripts/announcements.js"
       defer
     ></script> -->
-    <script
-      type="module"
-      src="/scripts/announcements.js"
-    ></script>
-
+   
+ 
     <style>
       #radio-canada-big {
         font-family: "Radio Canada Big", sans-serif;
@@ -43,7 +40,7 @@
       }
     </style>
   </head>
-
+ 
   <body
     class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-screen"
   >
@@ -58,7 +55,7 @@
             Bantay 72
           </span>
         </div>
-
+ 
         <nav class="flex flex-col gap-3">
           <a
             href="/src/dashboard.html"
@@ -81,9 +78,11 @@
             <i class="fas fa-chart-bar text-lg"></i>
             <span id="sidebar-analytics">Analytics & Reports</span>
           </a>
-          
-          <a href="/src/announcement.html"
-            class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition">
+ 
+          <a
+            href="/src/announcement.html"
+            class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 hover:text-[#9F2424] dark:hover:bg-gray-700 dark:hover:text-red-500 transition"
+          >
             <i class="fas fa-bullhorn"></i>
             <span id="sidebar-announcements">Announcements</span>
           </a>
@@ -112,14 +111,14 @@
           </a>
         </div>
       </aside>
-
+ 
       <!-- Main Content -->
       <main class="flex-1 p-6 overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
           <div>
             <h2
               id="announcements-title"
-              class="text-3xl font-extrabold dark:text-gray-100"
+              class="text-3xl font-bold dark:text-gray-100"
             >
               Announcements
             </h2>
@@ -137,15 +136,15 @@
             New Announcement
           </button>
         </div>
-
+ 
         <div
           class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden"
         >
           <table
-            class="w-full text-left border-collapse text-gray-900 dark:text-gray-100"
+            class="w-full text-center border-collapse text-gray-900 dark:text-gray-100"
           >
             <thead
-              class="bg-gray-200 dark:bg-gray-700 border-b text-gray-800 dark:text-gray-200"
+              class="bg-[#9F2424] top-0 z-10 dark:bg-gray-700 border-b text-white dark:text-gray-200"
             >
               <tr>
                 <th
@@ -178,6 +177,10 @@
                 >
                   Date
                 </th>
+                <th
+                  id="th-announcement-date"
+                  class="px-6 py-4 text-base font-bold"
+                ></th>
               </tr>
             </thead>
             <tbody
@@ -188,14 +191,14 @@
         </div>
       </main>
     </div>
-
+ 
     <!-- Modal -->
     <div
       id="announcementModal"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm hidden"
+      class="fixed hidden flex inset-0 items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
     >
       <div
-        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 border border-gray-200 dark:border-gray-600"
+        class="bg-white h-[35rem] dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 border overflow-y-auto border-gray-200 dark:border-gray-600"
       >
         <h2
           id="create-announcement-title"
@@ -203,7 +206,7 @@
         >
           Create Announcement
         </h2>
-
+ 
         <!-- Title -->
         <div class="mb-5">
           <label
@@ -217,7 +220,7 @@
             class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
           />
         </div>
-
+ 
         <!-- Category Dropdown -->
         <div class="mb-5">
           <label
@@ -241,7 +244,7 @@
             </option>
           </select>
         </div>
-
+ 
         <!-- Message -->
         <div class="mb-5">
           <label
@@ -255,7 +258,7 @@
             class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
           ></textarea>
         </div>
-
+ 
         <!-- Image Upload with Preview -->
         <div class="mb-6">
           <label
@@ -271,7 +274,7 @@
               class="cursor-pointer bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 py-2 rounded-lg text-sm font-medium text-gray-900 dark:text-gray-100 transition"
               >Choose File</label
             >
-            <span id="fileName">No file chosen</span>
+            <!-- <span id="fileName">No file chosen</span> -->
           </div>
           <input type="file" id="fileInput" accept="image/*" class="hidden" />
           <!-- Preview -->
@@ -282,13 +285,12 @@
             class="mt-3 hidden h-32 w-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
           />
         </div>
-        
-
+ 
         <!-- Buttons -->
         <div class="flex justify-end space-x-3">
           <button id="saveBtn" type="button">Save</button>
-<button id="cancelBtn" type="button">Cancel</button>
-
+          <button id="cancelBtn" type="button">Cancel</button>
+ 
           <!-- <button id="cancelBtn">Cancel</button>
           <button id="saveBtn">Save</button> -->
         </div>
@@ -296,3 +298,4 @@
     </div>
   </body>
 </html>
+ 

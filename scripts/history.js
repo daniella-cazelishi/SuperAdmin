@@ -1,20 +1,22 @@
-// Import Firebase
+// history.js
+ 
+// Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import {
   getAuth,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  orderBy,
-  query,
-  where,
-} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
+ 
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBPtb60dthvTPLmaRlL_E7YOsBDIAK-vKw",
@@ -24,64 +26,66 @@ const firebaseConfig = {
   messagingSenderId: "12884863424",
   appId: "1:12884863424:web:277b044f4005f7d80fc025",
 };
-
+ 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
-// Render resolved reports into table
-const renderResolvedReports = async (filter = null) => {
-  const table = document.getElementById("historyTable");
-  if (!table) return console.error("History table not found!");
-  const tableBody = table.querySelector("tbody");
-
-  const loadingRow = document.querySelector("#loading-row");
-  const noDataRow = document.querySelector("#no-data-row");
-
-  tableBody.innerHTML = ""; // Clear previous rows
-
-  const reportsRef = collection(db, "resolved_reports");
+ 
+// DOM elements
+const table = document.getElementById("historyTable");
+const tableBody = table.querySelector("tbody");
+const noDataRow = document.getElementById("no-data-row");
+const sortSelect = document.getElementById("sortFilter");
+const exportBtn = document.getElementById("exportPdfBtn");
+const modal = document.getElementById("detailsModal");
+const modalContent = document.getElementById("modalContent");
+const closeModalBtn = document.getElementById("closeModal");
+ 
+// --- FETCH AND RENDER REPORTS ---
+const renderHistory = async (filter = null) => {
+  if (!tableBody) return;
+ 
+  tableBody.innerHTML = ""; // Clear table
+ 
+  const reportsRef = collection(db, "sos_history");
   let q = query(reportsRef, orderBy("timestamp", "desc"));
-
+ 
   if (filter === "weekly" || filter === "monthly") {
     const now = new Date();
     let pastDate = new Date();
     if (filter === "weekly") pastDate.setDate(now.getDate() - 7);
     else if (filter === "monthly") pastDate.setMonth(now.getMonth() - 1);
-
+ 
     q = query(
       reportsRef,
       where("timestamp", ">=", pastDate),
       orderBy("timestamp", "desc")
     );
   }
-
+ 
   let snapshot;
   try {
     snapshot = await getDocs(q);
-    console.log("Resolved reports fetched:", snapshot.size);
   } catch (err) {
-    console.error("Firestore query failed:", err);
-    if (loadingRow) loadingRow.remove();
+    console.error("Firestore fetch failed:", err);
     return;
   }
-
-  if (loadingRow) loadingRow.remove();
-
+ 
   if (snapshot.empty) {
-    console.warn("No resolved reports found");
     if (noDataRow) noDataRow.classList.remove("hidden");
     return;
   } else {
     if (noDataRow) noDataRow.classList.add("hidden");
   }
-
+ 
   snapshot.forEach((docSnap) => {
     const report = docSnap.data();
     const timestamp = report.timestamp?.toDate?.().toLocaleString() || "N/A";
-    const status = report.status || "resolved";
-    const statusColor = "bg-green-600";
-
+    const status = report.status;
+    const statusColor =
+      status.toLowerCase() === "completed" ? "bg-green-600" : "bg-[#9F2424]";
+ 
     const row = document.createElement("tr");
     row.innerHTML = `
       <td class="p-3 text-center border-b">${report.category || "N/A"}</td>
@@ -89,191 +93,96 @@ const renderResolvedReports = async (filter = null) => {
       <td class="p-3 text-center border-b">${report.message || "N/A"}</td>
       <td class="p-3 text-center border-b">${timestamp}</td>
       <td class="p-3 text-center border-b">
-        <span class="px-2 py-1 rounded text-white ${statusColor}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+        <span class="px-3 py-2 rounded text-white ${statusColor}">${status}</span>
       </td>
       <td class="p-3 text-center border-b">
-        <button
-          class="viewBtn bg-red-600 hover:bg-red-800 text-white px-3 py-1 rounded"
-          data-id='${docSnap.id}'
-        >
-          View
-        </button>
+        <button class="viewBtn bg-red-600 hover:bg-red-800 text-white px-3 py-1 rounded" data-id="${
+          docSnap.id
+        }">View</button>
       </td>
     `;
     tableBody.appendChild(row);
   });
-
-  // View button click
-  // --- Modal Functions --- //
-function openModal() {
-  const modal = document.getElementById("detailsModal");
-  if (!modal) return;
-
-  modal.classList.remove("hidden");
-  modal.classList.remove("opacity-0");
-  modal.querySelector("div").classList.remove("scale-95");
-}
-
-function closeModal() {
-  const modal = document.getElementById("detailsModal");
-  if (!modal) return;
-
-  modal.classList.add("opacity-0");
-  modal.querySelector("div").classList.add("scale-95");
-
-  setTimeout(() => {
-    modal.classList.add("hidden");
-  }, 200); // matches transition duration
-}
-
-// Attach event to close button
-document.getElementById("closeModal").addEventListener("click", closeModal);
-
-// Close when clicking outside the modal content
-document.getElementById("detailsModal").addEventListener("click", (e) => {
-  if (e.target.id === "detailsModal") {
-    closeModal();
-  }
-});
-
-// Update renderResolvedReports -> View Button Handler
-document.querySelectorAll(".viewBtn").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    const reportId = btn.getAttribute("data-id");
-    if (!reportId) return alert("Missing report ID!");
-
-    const docRef = doc(db, "resolved_reports", reportId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const report = docSnap.data();
-      const timestamp = report.timestamp?.toDate?.().toLocaleString() || "N/A";
-
-      const modalContent = document.getElementById("modalContent");
-      modalContent.innerHTML = `
-        <h2 class="text-xl font-bold mb-4">Report Details</h2>
-        <p><strong>Type of Incident:</strong> ${report.category || "N/A"}</p>
-        <p><strong>Reported By:</strong> ${report.user || "N/A"}</p>
-        <p><strong>Message:</strong> ${report.message || "N/A"}</p>
-        <p><strong>Status:</strong> ${report.status || "resolved"}</p>
-        <p><strong>Date & Time:</strong> ${timestamp}</p>
-      `;
-
-      openModal();
-    } else {
-      alert("Report not found!");
-    }
+ 
+  attachViewEvents();
+};
+ 
+// --- VIEW BUTTON MODAL ---
+const attachViewEvents = () => {
+  document.querySelectorAll(".viewBtn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const reportId = btn.getAttribute("data-id");
+      if (!reportId) return;
+ 
+      try {
+        const docRef = doc(db, "sos_history", reportId);
+        const docSnap = await getDoc(docRef);
+ 
+        if (docSnap.exists()) {
+          const report = docSnap.data();
+          const timestamp =
+            report.timestamp?.toDate?.().toLocaleString() || "N/A";
+ 
+          modalContent.innerHTML = `
+            <h2 class="text-xl font-bold mb-4">Report Details</h2>
+            <p><strong>Type of Incident:</strong> ${
+              report.category || "N/A"
+            }</p>
+            <p><strong>Reported By:</strong> ${report.user || "N/A"}</p>
+            <p><strong>Message:</strong> ${report.message || "N/A"}</p>
+            <p><strong>Status:</strong> ${report.status || "Resolved"}</p>
+            <p><strong>Date & Time:</strong> ${timestamp}</p>
+          `;
+          modal.classList.remove("opacity-0", "pointer-events-none");
+        } else {
+          alert("Report not found!");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
   });
+};
+ 
+// --- CLOSE MODAL ---
+closeModalBtn.addEventListener("click", () => {
+  modal.classList.add("opacity-0", "pointer-events-none");
 });
+modal.addEventListener("click", (e) => {
+  if (e.target === modal)
+    modal.classList.add("opacity-0", "pointer-events-none");
+});
+ 
+// --- FILTERING ---
+if (sortSelect) {
+  sortSelect.addEventListener("change", (e) => renderHistory(e.target.value));
 }
-
-// On Auth state
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Viewing resolved reports as:", user.email);
-    renderResolvedReports(); // Default load
-
-    const sortSelect = document.getElementById("sortFilter");
-    if (sortSelect) {
-      sortSelect.addEventListener("change", (e) => {
-        renderResolvedReports(e.target.value);
-      });
-    }
-  } else {
-    console.warn("Not logged in. Cannot access resolved reports.");
-  }
-});
-
-// PDF Export
-document.addEventListener("DOMContentLoaded", () => {
-  const exportBtn = document.getElementById("exportPdfBtn");
-  if (!exportBtn) return;
-
+ 
+// --- PDF EXPORT ---
+if (exportBtn) {
   exportBtn.addEventListener("click", async () => {
-    const table = document.getElementById("historyTable");
-    if (!table) {
-      alert("Report table not found!");
-      return;
-    }
-
-    const canvas = await html2canvas(table, { scale: 2, scrollY: -window.scrollY });
+    if (!table) return;
+    const canvas = await html2canvas(table, {
+      scale: 2,
+      scrollY: -window.scrollY,
+    });
     const imgData = canvas.toDataURL("image/png");
-
     const pdf = new jspdf.jsPDF({
       orientation: "landscape",
       unit: "px",
       format: [canvas.width, canvas.height],
     });
-
     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
     pdf.save("report-history.pdf");
   });
-});
-
-// Close modal
-document.getElementById("closeModal").addEventListener("click", () => {
-  document.getElementById("detailsModal").classList.add("hidden");
-});
-
+}
  
-
-// // Function to open modal with animation
-// function openModal() {
-//   const modal = document.getElementById("detailsModal");
-//   modal.classList.remove("hidden");
-//   setTimeout(() => {
-//     modal.classList.remove("opacity-0");
-//     modal.querySelector("div").classList.remove("scale-95");
-//   }, 20);
-// }
-
-// // Function to close modal with animation
-// function closeModal() {
-//   const modal = document.getElementById("detailsModal");
-//   modal.classList.add("opacity-0");
-//   modal.querySelector("div").classList.add("scale-95");
-
-//   setTimeout(() => {
-//     modal.classList.add("hidden");
-//   }, 300);
-// }
-
-// // Event listener for close button
-// document.getElementById("closeModal").addEventListener("click", closeModal);
-
-// // Close modal if clicking outside the modal content
-// document.getElementById("detailsModal").addEventListener("click", (e) => {
-//   if (e.target.id === "detailsModal") {
-//     closeModal();
-//   }
-// });
-
-// // Attach event listeners to view buttons dynamically (after reports rendered)
-// document.querySelectorAll(".viewBtn").forEach((btn) => {
-//   btn.addEventListener("click", async () => {
-//     const reportId = btn.getAttribute("data-id");
-//     if (!reportId) return alert("Missing report ID!");
-
-//     const docRef = doc(db, "resolved_reports", reportId);
-//     const docSnap = await getDoc(docRef);
-
-//     if (docSnap.exists()) {
-//       const report = docSnap.data();
-//       const timestamp = report.timestamp?.toDate?.().toLocaleString() || "N/A";
-
-//       const modalContent = document.getElementById("modalContent");
-//       modalContent.innerHTML = `
-//         <p><strong>Type of Incident:</strong> ${report.incidentType || "N/A"}</p>
-//         <p><strong>Reported By:</strong> ${report.user || "N/A"}</p>
-//         <p><strong>Message:</strong> ${report.message || "N/A"}</p>
-//         <p><strong>With Volunteer:</strong> ${report.volunteer ? "Yes" : "No"}</p>
-//         <p><strong>Status:</strong> ${report.status || "N/A"}</p>
-//         <p><strong>Date & Time:</strong> ${timestamp}</p>
-//       `;
-
-//       openModal();
-//     } else {
-//       alert("Report not found!");
-//     }
-//   });
-// });
+// --- AUTH CHECK ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    renderHistory(); // default
+  } else {
+    console.warn("Not logged in");
+  }
+});
+ 

@@ -1,0 +1,36 @@
+Test Case ID,Test Type,Test Scenario,Test Steps,Expected Output,Status,Notes
+Phase 1: User Experience (Buttons & UI),,,,,,
+TC_UX_001,Internal Testing,"Get Started" Payload Trigger,"1. Click ""Get Started"" button.","Bot greets user by First Name. Main Menu buttons (Order Now, FAQs, Promos) appear immediately.",OPEN,
+TC_UX_002,Internal Testing,Persistent Menu Button Functionality,"1. Click ""Persistent Menu"" (Three lines icon).
+2. Select ""My Cart"".","System retrieves current cart status regardless of where the user is in the chat flow.",OPEN,
+TC_UX_003,Internal Testing,Carousel/Gallery Button Links,"1. Scroll to ""Best Sellers"" carousel.
+2. Click ""Order This"" button on a specific image.","Bot immediately adds that specific item to the cart (not just opening the general menu).",OPEN,
+Phase 2: Talking to Customers (Smart Button Logic),,,,,,
+TC_TALK_001,Internal Testing,Quick Reply Disappearance,"1. Bot asks: ""Dine-in or Take-out?"" with buttons.
+2. Click ""Dine-in"".","""Dine-in"" is selected. The buttons should disappear or become inactive to prevent double submission.",OPEN,
+TC_TALK_002,Internal Testing,Upsell Button Logic,"1. Add Burger.
+2. Bot shows button: ""Add Fries for ₱50?"".
+3. Click ""Yes"".","Cart updates: Price increases by exactly ₱50. ""Fries"" is added to the list.",OPEN,
+TC_TALK_003,Internal Testing,"Modify Order" Button,"1. At checkout summary, click ""Edit Order"" button.","Bot allows user to remove items or change quantity without clearing the entire cart.",OPEN,
+TC_TALK_004,Internal Testing,Button vs. Typing Consistency,"1. User types ""Order Burger"".
+2. User clicks ""Order Now"" button.","Both actions must lead to the exact same menu flow. No distinct difference in experience.",OPEN,
+Phase 3: General Inquiries (Context Aware),,,,,,
+TC_GEN_001,Internal Testing,Location Button (Map Pin),"1. User asks for location.
+2. Bot sends ""View on Map"" button.","Clicking the button opens the native map app (Google Maps/Waze) with correct coordinates.",OPEN,
+TC_GEN_002,Internal Testing,"Talk to Human" Button Handoff,"1. User clicks ""Contact Admin"" button in FAQ menu.","Bot pauses AI responses. Triggers notification to page admins.",OPEN,
+TC_GEN_003,Internal Testing,Operating Hours Logic,"1. User asks ""Open pa?"" at 2 AM.","Bot detects current time is past closing. Replies: ""Sorry, we are CLOSED. We open at 10 AM.""",OPEN,
+Phase 4: Payment & Delivery (Calculation Check),,,,,,
+TC_PAY_001,Internal Testing,Delivery Fee Calculation,"1. Select delivery location > 5km away via Location Button.","System automatically adds ""Long Distance Fee"" to the total bill if applicable.",OPEN,
+TC_PAY_002,Internal Testing,Accurate Grand Total,"1. Add Burger (₱150) + Fries (₱50).
+2. Click ""Checkout"".","Total displayed must be exactly ₱200. No random decimals or rounding errors.",OPEN,
+TC_PAY_003,Internal Testing,Payment Method Switch,"1. Select ""Cash"".
+2. Change mind and select ""GCash"".","System updates payment instructions (shows QR code/Number) immediately.",OPEN,
+Phase 5: Loyalty & Promotions (Math Check),,,,,,
+TC_LOY_001,Internal Testing,Promo Button Validation,"1. Click ""Claim Promo"" button on a broadcast message.","System checks eligibility. If user already claimed, show ""Already Used"" error.",OPEN,
+TC_LOY_002,Internal Testing,Discount Math,"1. Cart Total: ₱500.
+2. Apply 10% Off via Button.","Total becomes ₱450. System displays ""You saved ₱50!""",OPEN,
+Phase 6: Error Handling (Smart Fallbacks),,,,,,
+TC_ERR_001,Internal Testing,Button Spamming,"1. Click ""Place Order"" button 5 times rapidly.","System processes only ONE order. Backend does not create duplicate Order IDs.",OPEN,
+TC_ERR_002,Internal Testing,Dead Button handling,"1. Scroll up to a button from last week (e.g., ""Christmas Promo"").
+2. Click it.","Bot replies gracefully: ""This promo has expired"" instead of showing a raw error code.",OPEN,
+TC_ERR_003,Internal Testing,Gibberish/Typo Handling,"1. User types ""bogar"" instead of ""burger"".","Bot uses Fuzzy Logic to ask: ""Did you mean 'Burger'?"" instead of saying ""I don't understand.""",OPEN,\
